@@ -20,13 +20,11 @@ char *get_loc(char *cmd)
 		if (stat(tmp, &st) == 0)
 		{
 			free_list(head);
-			free(cmd);
 			return (tmp);
 		}
 		_dirs = _dirs->next;
 		free(tmp);
 	}
-	free(cmd);
 	free_list(head);
 	return (NULL);
 }

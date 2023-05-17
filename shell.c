@@ -22,12 +22,18 @@ int main(void)
 	{
 		write(STDOUT_FILENO, prmpt, 2);
 		n = 0;
-		if ((read = getline(&line, &n, stdin)) == -1)
+		read = getline(&line, &n, stdin);
+		if (read == -1)
 		{
 			perror("read failed\n");
 			return (1);
 		}
 		arg_v = handle_split(line, " ");
+		if (!arg_v)
+		{
+			perror("HAndle split failed\n");
+			continue;
+		}
 		if (*arg_v[0] != '/')
 			*arg_v = get_loc(*arg_v);
 		pid = fork();

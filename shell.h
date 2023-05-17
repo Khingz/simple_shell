@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+extern char **environ;
+
 /* Structs */
 typedef struct node {
 	struct node *next;

@@ -30,11 +30,30 @@ node_t *get_dir(char *path)
 {
 	int idx;
 	char **dirs;
-	node_t *head = NULL;
-	dirs = handle_split(path, ":");
+	node_t *head;
+	char *tmp_path;
+       
+	tmp_path = malloc(strlen(path) + 1);
+	if (tmp_path)
+		return (NULL);
+	_strcpy(tmp_path, path);
+	head = NULL;
+	dirs = handle_split(tmp_path, ":");
+	if (!dirs)
+	{
+		free(tmp_path);
+		return (NULL);
+	}
 	for (idx = 0; dirs[idx]; idx++)
-		add_node_end(&head, dirs[idx]);
-
+	{
+		if (add_node_end(&head, dirs[idx]) == NULL)
+		{
+			free_list(head);
+			free(dirs);
+			return (NULL);
+		}	
+	}
+	free(tmp_path);
 	free(dirs);
 	return (head);
 }

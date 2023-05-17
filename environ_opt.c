@@ -1,7 +1,5 @@
 #include "shell.h"
 
-extern char **environ;
-
 char *get_env(const char *name)
 {
 	int len, idx;
@@ -19,19 +17,16 @@ int set_env(const char *name, const char *val, int o_write)
 {
 	char *env_var, *new_val;
 	char **new_env;
-	int idx_1, idx_2;
+	int idx;
 	size_t name_len, value_len, size;
 
 	env_var = get_env(name);
 	name_len = _strlen(name);
 	value_len = _strlen(val);
 	new_val = malloc(name_len + 1 + value_len + 1);
-	for (idx_1 = 0; name[idx_1]; idx_1++)
-		new_val[idx_1] = name[idx_1];
-	new_val[idx_1++] = '=';
-	for (idx_2 = 0; val[idx_2]; idx_1++, idx_2++)
-		new_val[idx_1] = val[idx_2];
-	new_val[idx_1] = '\0';
+	_strcpy(new_val, name);
+	_strcat(new_val, "=");
+	_strcat(new_val, val);
 
 	for (size = 0; environ[size]; size++)
 		;
@@ -45,18 +40,18 @@ int set_env(const char *name, const char *val, int o_write)
 		return (-1);
 	}
 
-	for (idx_1 = 0; environ[idx_1]; idx_1++)
+	for (idx = 0; environ[idx]; idx++)
 	{
-		new_env[idx_1] = malloc(_strlen(environ[idx_1] + 1));
-		if (!new_env[idx_1])
+		new_env[idx] = malloc(_strlen(environ[idx] + 1));
+		if (!new_env[idx])
 		{
-			for(idx_1--; idx_1 >= 0; idx_1--)
-				free(new_env[idx_1]);
+			for(idx--; idx >= 0; idx--)
+				free(new_env[idx]);
 			free(new_env);
 			free(new_val);
 			return (-1);
 		}
-		_strcpy(new_env[idx_1], environ[idx_1]);
+		_strcpy(new_env[idx], environ[idx]);
 	}
 	environ = new_env;
 	env_var = get_env(name);
@@ -65,8 +60,8 @@ int set_env(const char *name, const char *val, int o_write)
 		env_var = new_val;
 		return (0);
 	}
-	environ[idx_1] = new_val;
-	environ[idx_1 + 1] = NULL;
+	environ[idx] = new_val;
+	environ[idx + 1] = NULL;
 	return (0);
 }
 

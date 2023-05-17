@@ -28,7 +28,7 @@ char **handle_split(char *line, char *delim)
 			for (idx -= 1; idx >= 0; idx--)
 				free(ptr[idx]);
 			free(ptr);
-			exit(99);
+			return (NULL);
 		}
 		_strcpy(ptr[idx], token);
 		token = strtok(NULL, delim);
