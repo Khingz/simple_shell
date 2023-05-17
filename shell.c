@@ -8,31 +8,48 @@
  * Return: 0.
  */
 
-int main(int argc, char *argv[])
+int main(void)
 {
-	char *prmt;
+	pid_t pid;
+	int status;
+	char **arg_v;
+	size_t n, index, read;
+	char *line, *prmpt;
 
-	prmt = "$ ";
-
-	if (argc != 1)
-	{
-		continue;
-
+	line = NULL;
+	prmpt = "$ ";
 	while (1)
 	{
-		write(STDOUT_FILENO, prompt, 2);
-		ret = handle_args(exe_ret);
-		if (ret == END_OF_FILE || ret == EXIT)
+		write(STDOUT_FILENO, prmpt, 2);
+		n = 0;
+		if ((read = getline(&line, &n, stdin)) == -1)
 		{
-			if (ret == END_OF_FILE)
-				write(STDOUT_FILENO, new_line, 1);
-			free_env();
-			free_alias_list(aliases);
-			exit(*exe_ret);
+			perror("read failed\n");
+			return (1);
 		}
+		arg_v = _strtok(line, " ");
+		if (*arg_v[0] != '/')
+			*arg_v = get_location(*arg_v);
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("Error child:");
+			return (1);
+		}
+		if (pid == 0)
+		{
+			if (execve(*arg_v, arg_v, NULL) == -1)
+				perror("Error exec gone wrong:");
+		}
+		else
+		{
+			wait(&status);
+		}
+		for (idx = 0; arg_v[idx]; idx++)
+			free(argv[idx]);
+		free(arg_v);
+		free(line);
+		return (0);
 	}
-
-	free_env();
-	free_alias_list(aliases);
-	return (*exe_ret);
+	return (0);
 }
