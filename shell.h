@@ -27,6 +27,8 @@ char *get_loc(char *cmd);
 node_t *add_node_end(node_t **head, char *dir);
 void free_list(node_t *head);
 char **handle_split(char *line, char *delim);
+char **clear_input(char **argv);
+int exec(char **arg);
 
 /** string helper funcions */
 int _strlen(const char *s);

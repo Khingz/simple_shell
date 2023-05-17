@@ -8,16 +8,27 @@
  * Return: 0.
  */
 
-int main(void)
+int main(int argc, char *argv[])
 {
-	pid_t pid;
-	int status;
-	char **arg_v;
 	size_t n, idx, read;
-	char *line, *prmpt;
+	char *prmpt, *line, *cmd;
+	int ex_val;
 
 	line = NULL;
 	prmpt = "$ ";
+	if (argc != 1)
+		return (exec(argv + 1));
+	if (!isatty(STDIN_FILENO))
+	{
+		argv = clear_input(argv);
+		while (argv)
+		{
+			exec(argv);
+			argv = NULL;
+			argv = clear_input(argv);
+		}
+		return (0);
+	}
 	while (1)
 	{
 		write(STDOUT_FILENO, prmpt, 2);
@@ -28,34 +39,20 @@ int main(void)
 			perror("read failed\n");
 			return (1);
 		}
-		arg_v = handle_split(line, " ");
-		if (!arg_v)
+		argv = handle_split(line, " ");
+		if (!argv)
 		{
 			perror("HAndle split failed\n");
 			continue;
 		}
-		if (*arg_v[0] != '/')
-			*arg_v = get_loc(*arg_v);
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("Error child:");
-			return (1);
-		}
-		if (pid == 0)
-		{
-			if (execve(*arg_v, arg_v, NULL) == -1)
-				perror("Error exec gone wrong:");
-		}
-		else
-		{
-			wait(&status);
-		}
-		for (idx = 0; arg_v[idx]; idx++)
-			free(arg_v[idx]);
-		free(arg_v);
+		cmd = argv[0];
+		ex_val = exec(argv);
+		for (idx = 1; argv[idx]; idx++)
+			free(argv[idx]);
+		free(argv);
+		free(cmd);
 		free(line);
 		return (0);
 	}
-	return (0);
+	return (ex_val);
 }
