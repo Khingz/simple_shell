@@ -12,6 +12,8 @@ char *get_loc(char *cmd)
 	char *tmp, *path;
 
 	path = get_env("PATH");
+	if (!path)
+		return (NULL);
 	_dirs = get_dir(path + 5);
 	head = _dirs;
 	while (_dirs)
