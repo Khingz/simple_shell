@@ -12,7 +12,11 @@
 
 extern char **environ;
 
-/* Structs */
+/**
+ * struct node -  new struct type that defines a linked list.
+ * @dir: directory path.
+ * @next: pointer to another struct list_s.
+ */
 typedef struct node {
 	struct node *next;
 	char *dir;
