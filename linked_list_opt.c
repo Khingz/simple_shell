@@ -1,5 +1,11 @@
 #include "shell.h"
 
+/**
+ * add_node_end - adds a new node to the end of a  linked list.
+ * @head: pointer to the head of the node_t
+ * @dir: directory path for the new node to contain.
+ * Return: pointer to the new node or NULL.
+ */
 node_t *add_node_end(node_t **head, char *dir)
 {
 	node_t *new_node = malloc(sizeof(node_t));
@@ -26,6 +32,11 @@ node_t *add_node_end(node_t **head, char *dir)
 	return (new_node);
 }
 
+/**
+ * get_dir - takes token to a colon-separated list of dir into a linked list.
+ * @path: colon-separated list of dir.
+ * Return: pointer to the initial linked list.
+ */
 node_t *get_dir(char *path)
 {
 	int idx;
@@ -58,6 +69,10 @@ node_t *get_dir(char *path)
 	return (head);
 }
 
+/**
+ * free_list - func that frees a linked list.
+ * @head: pointer to  head of node_t.
+ */
 void free_list(node_t *head)
 {
 	node_t *next;
