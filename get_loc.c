@@ -1,5 +1,10 @@
 #include "shell.h"
 
+/**
+ * get_loc - func that locates a command in the PATH.
+ * @cmd: command to locate in the PATH.
+ * Return: name of PATH or NULL.
+ */
 char *get_loc(char *cmd)
 {
 	node_t *head, *_dirs;
