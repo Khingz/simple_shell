@@ -44,8 +44,8 @@ node_t *get_dir(char *path)
 	node_t *head;
 	char *tmp_path;
        
-	tmp_path = malloc(strlen(path) + 1);
-	if (tmp_path)
+	tmp_path = malloc(_strlen(path) + 1);
+	if (!tmp_path)
 		return (NULL);
 	_strcpy(tmp_path, path);
 	head = NULL;

@@ -45,14 +45,13 @@ int main(int argc, char *argv[])
 			perror("HAndle split failed\n");
 			continue;
 		}
-		cmd = *argv;
+		cmd = argv[0];
 		ex_val = exec(argv);
 		for (idx = 1; argv[idx]; idx++)
 			free(argv[idx]);
 		free(argv);
 		free(line);
 		free(cmd);
-		return (0);
 	}
 	return (ex_val);
 }
