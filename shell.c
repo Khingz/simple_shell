@@ -13,7 +13,7 @@ int main(void)
 	pid_t pid;
 	int status;
 	char **arg_v;
-	size_t n, index, read;
+	size_t n, idx, read;
 	char *line, *prmpt;
 
 	line = NULL;
@@ -27,9 +27,9 @@ int main(void)
 			perror("read failed\n");
 			return (1);
 		}
-		arg_v = _strtok(line, " ");
+		arg_v = handle_split(line, " ");
 		if (*arg_v[0] != '/')
-			*arg_v = get_location(*arg_v);
+			*arg_v = get_loc(*arg_v);
 		pid = fork();
 		if (pid == -1)
 		{
@@ -46,7 +46,7 @@ int main(void)
 			wait(&status);
 		}
 		for (idx = 0; arg_v[idx]; idx++)
-			free(argv[idx]);
+			free(arg_v[idx]);
 		free(arg_v);
 		free(line);
 		return (0);

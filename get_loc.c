@@ -4,11 +4,11 @@ char *get_loc(char *cmd)
 {
 	node_t *head, *_dirs;
 	struct stat st;
-	char *tmp, *path
+	char *tmp, *path;
 
 	path = get_env("PATH");
 	_dirs = get_dir(path + 5);
-	head = _dir;
+	head = _dirs;
 	while (_dirs)
 	{
 		tmp = malloc(_strlen(_dirs->dir) + 1 + _strlen(cmd) + 1);

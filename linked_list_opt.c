@@ -26,12 +26,12 @@ node_t *add_node_end(node_t **head, char *dir)
 	return (new_node);
 }
 
-node_t *get_path_dir(char *path)
+node_t *get_dir(char *path)
 {
 	int idx;
 	char **dirs;
 	node_t *head = NULL;
-	dirs = _strtok(path, ":");
+	dirs = handle_split(path, ":");
 	for (idx = 0; dirs[idx]; idx++)
 		add_node_end(&head, dirs[idx]);
 

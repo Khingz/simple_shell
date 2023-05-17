@@ -17,20 +17,20 @@ char *get_env(const char *name)
 
 int set_env(const char *name, const char *val, int o_write)
 {
-	char *env_var, new_val;
+	char *env_var, *new_val;
 	char **new_env;
 	int idx_1, idx_2;
 	size_t name_len, value_len, size;
 
-	env_var = _getenv(name);
+	env_var = get_env(name);
 	name_len = _strlen(name);
-	value_len = _strlen(value);
+	value_len = _strlen(val);
 	new_val = malloc(name_len + 1 + value_len + 1);
 	for (idx_1 = 0; name[idx_1]; idx_1++)
-		new_val[idx] = name[idx];
-	new_val[idx++] = '=';
+		new_val[idx_1] = name[idx_1];
+	new_val[idx_1++] = '=';
 	for (idx_2 = 0; val[idx_2]; idx_1++, idx_2++)
-		new_val[idx_1] = value[idx_2];
+		new_val[idx_1] = val[idx_2];
 	new_val[idx_1] = '\0';
 
 	for (size = 0; environ[size]; size++)
@@ -59,7 +59,7 @@ int set_env(const char *name, const char *val, int o_write)
 		_strcpy(new_env[idx_1], environ[idx_1]);
 	}
 	environ = new_env;
-	env_var = _getenv(name);
+	env_var = get_env(name);
 	if (env_var && o_write)
 	{
 		env_var = new_val;
@@ -74,10 +74,10 @@ int unset_env(const char *name)
 {
 	char **new_env;
 	size_t size;
-	int index, index2;
+	int idx_1, idx_2;
 	char *env_var;
 
-	env_var = _getenv(name);
+	env_var = get_env(name);
 	if (!env_var)
 		return (0);
 
