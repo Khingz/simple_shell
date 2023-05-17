@@ -1,5 +1,11 @@
 #include "shell.h"
 
+/**
+ * handle_split - adds token a string.
+ * @line: the string.
+ * @delim: delimiter character that adds token to the string.
+ * Return: A pointer to an array.
+ */
 char **handle_split(char *line, char *delim)
 {
 	char **ptr;
