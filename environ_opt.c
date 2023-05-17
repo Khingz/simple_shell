@@ -1,5 +1,10 @@
 #include "shell.h"
 
+/**
+ * get_env - Gets an env variable from the PATH.
+ * @name: name of the env variable to get.
+ * Return: pointer to env or NULL.
+ */
 char *get_env(const char *name)
 {
 	int len, idx;
@@ -13,6 +18,13 @@ char *get_env(const char *name)
 	return (NULL);
 }
 
+/**
+ * set_env -  sets an env variable to the PATH.
+ * @name: name of the env variable to change or add.
+ * @val: value of the env variable to change or add.
+ * @o_write: flag indicating if the variable should be overwritten.
+ * Return: -1 or - 0.
+ */
 int set_env(const char *name, const char *val, int o_write)
 {
 	char *env_var, *new_val;
@@ -65,6 +77,11 @@ int set_env(const char *name, const char *val, int o_write)
 	return (0);
 }
 
+/**
+ * unset_env - del an env variable from the PATH.
+ * @name: name of the env variable to delete.
+ * Return: -1 or -0.
+ */
 int unset_env(const char *name)
 {
 	char **new_env;
