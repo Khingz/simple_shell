@@ -57,3 +57,38 @@ char **clear_input(char **argv)
 	free(line_ptr);
 	return (argv);
 }
+
+int execute_args(char **argv, char *name, int *hist)
+{
+	int idx, ex_val;
+
+	argv = _get_args(argv);
+	if (!argv)
+		return (-1);
+
+	ex_val = exec(argv, name, *hist);
+	(*hist)++;
+	for (idx = 0; argv[idx]; idx++)
+		free(argv[idx]);
+	free(argv);
+	argv = NULL;
+	return (ex_val);
+}
+
+char **_get_args(char **argv)
+{
+	size_t read, n;
+	char *line_ptr;
+       
+	n = 0;
+	line_ptr= NULL;
+	read = getline(&line_ptr, &n, stdin);
+	if (read == -1)
+	{
+		free(line_ptr);
+		return (NULL);
+	}
+	argv = handle_split(line_ptr, " ");
+	free(line_ptr);
+	return (argv);
+}

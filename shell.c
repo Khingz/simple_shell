@@ -10,11 +10,9 @@
 
 int main(int argc, char *argv[])
 {
-	size_t n, idx, read;
-	char *prmpt, *line, *cmd, *name;
+	char *prmpt, *name;
 	int ex_val, hist;
 
-	line = NULL;
 	hist = 1;
 	prmpt = "$ ";
 	name = *argv;
@@ -23,45 +21,20 @@ int main(int argc, char *argv[])
 	if (!isatty(STDIN_FILENO))
 	{
 		argv = clear_input(argv);
-		while (argv)
+		while (ex_val != -1)
 		{
-			cmd = *argv;
-			ex_val = exec(argv, name, hist);
-			hist++;
-			for (idx = 1; argv[idx]; idx++)
-				free(argv[idx]);
-			free(argv);
-			free(cmd);
-			argv = NULL;
-			argv = clear_input(argv);
+			ex_val = execute_args(argv, name, &hist);
 		}
-		return (ex_val);
+		return (0);
 	}
 	while (1)
 	{
 		write(STDOUT_FILENO, prmpt, 2);
-		n = 0;
-		read = getline(&line, &n, stdin);
-		if (read == -1)
-		{
-			perror("read failed\n");
-			return (1);
-		}
-		argv = handle_split(line, " ");
-		if (!argv)
+		ex_val = execute_args(argv, name, &hist);
+		if (ex_val == -1)
 		{
 			perror("HAndle split failed\n");
-			continue;
 		}
-		cmd = argv[0];
-		ex_val = exec(argv, name, hist);
-		hist++;
-		for (idx = 1; argv[idx]; idx++)
-			free(argv[idx]);
-		free(argv);
-		free(line);
-		free(cmd);
-		return (ex_val);
 	}
 	return (ex_val);
 }
