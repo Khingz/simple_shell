@@ -32,7 +32,8 @@ node_t *add_node_end(node_t **head, char *dir);
 void free_list(node_t *head);
 char **handle_split(char *line, char *delim);
 char **clear_input(char **argv);
-int exec(char **arg);
+int exec(char **arg, char *name, int hist);
+void create_err(char *name, int hist, char *cmd, int error);
 
 /** string helper funcions */
 int _strlen(const char *s);
@@ -43,5 +44,9 @@ char *_strchr(char *s, char c);
 int _strspn(char *s, char *accept);
 int _strcmp(char *s1, char *s2);
 int _strncmp(const char *s1, const char *s2, size_t n);
+
+/* Error helpers */
+int num_length(int num);
+char *_itoa(int num);
 
 #endif

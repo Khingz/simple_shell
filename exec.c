@@ -1,10 +1,12 @@
 #include "shell.h"
 
-int exec(char **arg)
+int exec(char **arg, char *name, int hist)
 {
-	pid_t pid_child;
+	pid_t pid_child, ex_val;
 	int status, flag;
-
+	char *cmd;
+       
+	cmd = *arg;
 	flag = 0;
 	if (*arg[0] != '/')
 	{
@@ -23,16 +25,20 @@ int exec(char **arg)
 	if (pid_child == 0)
 	{
 		if (execve(*arg, arg, NULL) == -1)
-			perror("Error executing");
+		{
+			create_err(name, hist, cmd, 1);
+			return (127);
+		}
 	}
 	else
 	{
 		wait(&status);
+		ex_val = WEXITSTATUS(status);
 	}
 
 	if (flag)
 		free(*arg);
-	return (0);
+	return (ex_val);
 }
 
 char **clear_input(char **argv)
@@ -42,9 +48,12 @@ char **clear_input(char **argv)
 
 	read = getline(&line_ptr, &n, stdin);
 	if (read == -1)
+	{
+		free(line_ptr);
 		return (NULL);
+	}
 
 	argv = handle_split(line_ptr, " ");
-
+	free(line_ptr);
 	return (argv);
 }
