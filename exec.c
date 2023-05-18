@@ -26,7 +26,7 @@ int exec(char **arg, char *name, int hist)
 	{
 		if (execve(cmd, arg, NULL) == -1)
 		{
-			create_err(name, hist, *arg, 1);
+			create_err(name, hist, cmd, 1);
 			return (127);
 		}
 	}
