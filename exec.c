@@ -8,7 +8,7 @@ int exec(char **arg, char *name, int hist)
        
 	cmd = *arg;
 	flag = 0;
-	if (cmd[0] != '/')
+	if (*cmd != '.' && *cmd != '/')
 	{
 		flag = 1;
 		cmd = get_loc(cmd);
@@ -24,10 +24,13 @@ int exec(char **arg, char *name, int hist)
 	}
 	if (pid_child == 0)
 	{
+		if (!cmd || (access(cmd, F_OK) == -1))
+			return(create_err(name, hist, *arg, 127));
+		if (access(cmd, X_OK) == -1)
+			return (create_err(name, hist, *arg, 126));
 		if (execve(cmd, arg, NULL) == -1)
 		{
-			create_err(name, hist, *arg, 1);
-			return (127);
+			perror("EEEEEEEEERRRRROO");
 		}
 	}
 	else
