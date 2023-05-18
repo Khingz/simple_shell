@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
 		while (ex_val != -1)
 		{
 			ex_val = execute_args(argv, name, &hist);
-			return (0);
 		}
+		return (0);
 	}
 	while (1)
 	{

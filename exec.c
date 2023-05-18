@@ -11,7 +11,7 @@ int exec(char **arg, char *name, int hist)
 	if (cmd[0] != '/')
 	{
 		flag = 1;
-		*arg = get_loc(cmd);
+		cmd = get_loc(cmd);
 	}
 
 	pid_child = fork();
@@ -26,7 +26,7 @@ int exec(char **arg, char *name, int hist)
 	{
 		if (execve(cmd, arg, NULL) == -1)
 		{
-			create_err(name, hist, cmd, 1);
+			create_err(name, hist, *arg, 1);
 			return (127);
 		}
 	}
