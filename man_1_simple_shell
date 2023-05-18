@@ -1,0 +1,51 @@
+ .TH SHELLBY 1 "May 2023" "ALX School" "0x16. C - Simple Shell"                  
+  2 .SH NAME                                                                        
+  3 .B shellby\fR \- simple UNIX command interpreter                                
+  4 .SH SYNOPSIS                                                                    
+  5 .B shellby\fR                                                                   
+  6 .SH DESCRIPTION                                                                 
+  7 .B Shellby\fR is a simple UNIX command language interpreter that executes       
+  8 commands read from standard input.                                              
+  9 .PP                                                                             
+ 10 .B Invocation                                                                   
+ 11 .PP                                                                             
+ 12 If \fBshellby\fR is invoked with arguments, the first argument is assumed to    
+ 13 be a string containing arguments.                                               
+ 14 .B Shellby\fR tokenizes and executes commands from this string, then exits with 
+ 15 the status of the last command executed.                                        
+ 16 .PP                                                                             
+ 17 If \fBshellby\fR is invoked without arguments, an \fIinteractive\fR shell is    
+ 18 opened.                                                                         
+ 19 When executing interactively, \fBshellby\fR displays the prompt \fI$ \fR when   
+ 20 it is ready to read a command.                                                  
+ 21 .PP                                                                             
+ 22 .B Command Execution                                                            
+ 23 .PP                                                                             
+ 24 After receiving a command, \fBshellby\fR tokenizes it into words and takes the  
+ 25 following actions:                                                              
+ 26 .RS                                                                             
+ 27 If the command name contains no slashes, the shell searches for it in the list  
+ 28 of shell builtins.                                                              
+ 29 If there exists a shell builtin by that name, the builtin is invoked.           
+ 30 .PP                                                                             
+ 31 If the command name is not a builtin, \fBshellby\fR searches each element of    
+ 32 the \fBPATH\fR environmental variable for a directory containing an executable  
+ 33 file by that name.                                                              
+ 34 .PP                                                                             
+ 35 If either of the above searches is successful, the shell executes the named     
+ 36 program with any remaining arguments given in a separate execution environment. 
+ 37 .RE                                                                             
+ 38 .PP                                                                             
+ 39 .B Exit Status                                                                  
+ 40 .PP                                                                             
+ 41 .B Shellby\fR returns the exit status of the last command executed, unless a    
+ 42 syntax error occurs, in which case it exits with a non-zero value.              
+ 43 .PP                                                                             
+ 44 .B Shellby Builtin Commands                                                     
+ 45 .PP                                                                             
+ 46 .SH SEE ALSO                                                                    
+ 47 execve(2), exit(3), fork(2), stat(2), sh(1), wait(2)                            
+ 48 .PP                                                                             
+ 49 .B Shellby\fR emulates basic functionality of the \fBsh\fR shell.               
+ 50 This man page borrows from the corresponding man page sh(1).                    
+ 51 .SH AUTHOR    
