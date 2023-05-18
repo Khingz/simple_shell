@@ -20,12 +20,11 @@ int main(int argc, char *argv[])
 		return (exec(argv + 1, name, hist));
 	if (!isatty(STDIN_FILENO))
 	{
-		argv = clear_input(argv);
 		while (ex_val != -1)
 		{
 			ex_val = execute_args(argv, name, &hist);
+			return (0);
 		}
-		return (0);
 	}
 	while (1)
 	{

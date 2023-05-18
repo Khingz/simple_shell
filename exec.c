@@ -8,23 +8,23 @@ int exec(char **arg, char *name, int hist)
        
 	cmd = *arg;
 	flag = 0;
-	if (*arg[0] != '/')
+	if (cmd[0] != '/')
 	{
 		flag = 1;
-		*arg = get_loc(*arg);
+		*arg = get_loc(cmd);
 	}
 
 	pid_child = fork();
 	if (pid_child == -1)
 	{
 		if (flag)
-			free(*arg);
+			free(cmd);
 		perror("Error child:");
 		return (1);
 	}
 	if (pid_child == 0)
 	{
-		if (execve(*arg, arg, NULL) == -1)
+		if (execve(cmd, arg, NULL) == -1)
 		{
 			create_err(name, hist, cmd, 1);
 			return (127);
@@ -37,7 +37,7 @@ int exec(char **arg, char *name, int hist)
 	}
 
 	if (flag)
-		free(*arg);
+		free(cmd);
 	return (ex_val);
 }
 
@@ -58,6 +58,7 @@ char **clear_input(char **argv)
 	return (argv);
 }
 
+//run_args
 int execute_args(char **argv, char *name, int *hist)
 {
 	int idx, ex_val;
