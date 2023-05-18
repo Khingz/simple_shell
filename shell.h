@@ -33,7 +33,7 @@ void free_list(node_t *head);
 char **handle_split(char *line, char *delim);
 char **clear_input(char **argv);
 int exec(char **arg, char *name, int hist);
-void create_err(char *name, int hist, char *cmd, int error);
+int create_err(char *name, int hist, char *cmd, int error);
 int execute_args(char **argv, char *name, int *hist);
 char **_get_args(char **argv);
 
