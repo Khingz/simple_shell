@@ -27,16 +27,16 @@ int exec(char **arg, char *name, int hist)
 		if (!cmd || (access(cmd, F_OK) == -1))
 		{
 			if (errno == EACCES)
-				return (create_err(name, hist, *argv, 126));
+				_exit(create_err(name, hist, *argv, 126));
 			else
-				return (create_err(name, hist, *argv, 127));
+				_exit(create_err(name, hist, *argv, 127));
 			return(create_err(name, hist, *arg, 127));
 		}
 		/*if (access(cmd, X_OK) == -1)
 			return (create_err(name, hist, *arg, 126));*/
 		execve(cmd, argv, NULL);
 		if (errno == EACCES)
-			return (create_err(name, hist, *argv, 126));
+			_exit(create_err(name, hist, *argv, 126));
 	}
 	else
 	{
@@ -70,17 +70,22 @@ char **clear_input(char **argv)
 int execute_args(char **argv, char *name, int *hist)
 {
 	int idx, ex_val;
+	int (*builtin)(char **argv);
 
-	ex_val = _get_args(argv);
-	if (ex_val == -1)
+	argv = _get_args(argv);
+	if (!argv)
 	{
 		return (-1);
 	}
-	if (ex_val == -2)
+	builtin = get_builtin(argv[0]);
+	if (builtin)
 	{
-		return (-2);
+		ex_val = builtin(argv);
+		if(ex_val)
+			create_err(name, *hist, argv, ex_val);
 	}
-	ex_val = exec(argv, name, *hist);
+	else
+		ex_val = exec(argv, name, *hist);
 	(*hist)++;
 	for (idx = 0; argv[idx]; idx++)
 		free(argv[idx]);

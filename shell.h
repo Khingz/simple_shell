@@ -13,6 +13,8 @@
 
 extern char **environ;
 
+/** STRUCTURES */
+
 /**
  * struct node -  new struct type that defines a linked list.
  * @dir: directory path.
@@ -22,6 +24,17 @@ typedef struct node {
 	struct node *next;
 	char *dir;
 } node_t;
+
+/**
+ * struct builtin_s - A structure type defining all builtin commands.
+ * @name: The name of the builtin command.
+ * @f: A function pointer to the command's function.
+ */
+typedef struct builtin_s
+{
+	char *name;
+	int (*f)(char **argv);
+} builtin_t;
 
 /* function prototypes */
 char *get_env(const char *name);
@@ -34,7 +47,7 @@ void free_list(node_t *head);
 char **handle_split(char *line, char *delim);
 char **clear_input(char **argv);
 int exec(char **arg, char *name, int hist);
-int create_err(char *name, int hist, char *cmd, int error);
+int create_err(char *name, int hist, char *args, int error);
 int execute_args(char **argv, char *name, int *hist);
 int _get_args(char **argv);
 void handle_signal(int signal);
@@ -52,5 +65,8 @@ int _strncmp(const char *s1, const char *s2, size_t n);
 /* Error helpers */
 int num_length(int num);
 char *_itoa(int num);
+char *err_2(char *name, int hist, char **argv);
+char *err_126(char *name, int hist, char **argv);
+char *err_127(char *name, int hist, char **argv);
 
 #endif
