@@ -51,6 +51,8 @@ int create_err(char *name, int hist, char *args, int error);
 int execute_args(char **argv, char *name, int *hist);
 int _get_args(char **argv);
 void handle_signal(int signal);
+char ** copy_env(void);
+void free_env(void);
 
 /** string helper funcions */
 int _strlen(const char *s);
@@ -68,5 +70,9 @@ char *_itoa(int num);
 char *err_2(char *name, int hist, char **argv);
 char *err_126(char *name, int hist, char **argv);
 char *err_127(char *name, int hist, char **argv);
+
+/* Builtin */
+int exit_shell(char **argv);
+int (*_getbuiltin(char *cmd))(char **argv);
 
 #endif

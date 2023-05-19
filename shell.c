@@ -30,6 +30,9 @@ int main(int argc, char *argv[])
 		}
 		return (ex_val);
 	}
+	environ = copy_env();
+	if (!environ)
+		exit(-100);
 	while (1)
 	{
 		write(STDOUT_FILENO, prmpt, 2);

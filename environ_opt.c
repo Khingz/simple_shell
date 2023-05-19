@@ -54,17 +54,9 @@ int set_env(const char *name, const char *val, int o_write)
 
 	for (idx = 0; environ[idx]; idx++)
 	{
-		new_env[idx] = malloc(_strlen(environ[idx] + 1));
-		if (!new_env[idx])
-		{
-			for(idx--; idx >= 0; idx--)
-				free(new_env[idx]);
-			free(new_env);
-			free(new_val);
-			return (-1);
-		}
-		_strcpy(new_env[idx], environ[idx]);
+		new_env[dx] = environ[idx];
 	}
+	free(environ);
 	environ = new_env;
 	env_var = get_env(name);
 	if (env_var && o_write)
@@ -103,19 +95,59 @@ int unset_env(const char *name)
 	for (idx_1 = 0, idx_2 = 0; environ[idx_1]; idx_1++)
 	{
 		if (env_var == environ[idx_1])
-			continue;
-		new_env[idx_2] = malloc(strlen(environ[idx_1] + 1));
-		if (!new_env[idx_2])
 		{
-			for(idx_2--; idx_2 >= 0; idx_2--)
-				free(new_env[idx_2]);
-			free(new_env);
-			return (-1);
+			free(env_var);
+			continue;
 		}
-		_strcpy(new_env[idx_2], environ[idx_1]);
 		idx_2++;
 	}
+	free(environ);
 	environ = new_env;
 	environ[size - 1] = NULL;
 	return (0);
+}
+
+/**
+ * copy_env - make a copy of the env.
+ * Return: ponter ro copied or NULL
+ */
+char **copy_env(void)
+{
+	char **new_env;
+	size_t size;
+	int idx;
+
+	for (size = 0; environ[size]; size++)
+		;
+
+	new_env = malloc(sizeof(char *) * (size + 1));
+	if (!new_env)
+		return (NULL);
+
+	for (idx = 0; environ[idx]; idx++)
+	{
+		new_env[idx] = malloc(_strlen(env[idx] + 1));
+		if (!new_env[idx])
+		{
+			for (idx--; idx >= 0; idx--)
+				free(new_envn[idx]);
+			free(new_env);
+			return (NULL);
+		}
+		_strcpy(new_env[idx], environ[idx]);
+	}
+	new_env[idx] = NULL;
+	return (new_env);
+}
+
+/**
+ * free_env - Frees the the env copy.
+ */
+void free_env(void)
+{
+	int index;
+
+	for (index = 0; environ[index]; index++)
+		free(environ[index]);
+	free(environ);
 }
