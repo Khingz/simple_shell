@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 	char *prmpt, *name;
 	int ex_val, hist;
 
+	signal(SIGINT, handle_signal);
 	hist = 1;
 	prmpt = "$ ";
 	name = *argv;
@@ -30,10 +31,6 @@ int main(int argc, char *argv[])
 	{
 		write(STDOUT_FILENO, prmpt, 2);
 		ex_val = execute_args(argv, name, &hist);
-		if (ex_val == -1)
-		{
-			perror("HAndle split failed\n");
-		}
 	}
 	return (ex_val);
 }

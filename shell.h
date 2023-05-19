@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 
 extern char **environ;
 
@@ -36,6 +37,7 @@ int exec(char **arg, char *name, int hist);
 int create_err(char *name, int hist, char *cmd, int error);
 int execute_args(char **argv, char *name, int *hist);
 char **_get_args(char **argv);
+void handle_signal(int signal);
 
 /** string helper funcions */
 int _strlen(const char *s);

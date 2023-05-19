@@ -87,8 +87,12 @@ char **_get_args(char **argv)
 	n = 0;
 	line_ptr= NULL;
 	read = getline(&line_ptr, &n, stdin);
-	if (read == -1)
+	if (read == 1 || read == -1)
 	{
+		if (read == -1)
+		{
+			perror("token failed\n");
+		}
 		free(line_ptr);
 		return (NULL);
 	}
