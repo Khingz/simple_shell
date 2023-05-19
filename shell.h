@@ -51,6 +51,7 @@ void handle_signal(int signal);
 char ** copy_env(void);
 void free_env(void);
 int handle_args(char *name, int *hist);
+char *populate_path_dir(char *path);
 
 /** string helper funcions */
 int _strlen(const char *s);

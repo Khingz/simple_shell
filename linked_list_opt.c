@@ -44,15 +44,14 @@ node_t *get_dir(char *path)
 	node_t *head;
 	char *tmp_path;
        
-	tmp_path = malloc(_strlen(path) + 1);
+	tmp_path = populate_path_dir(path);
 	if (!tmp_path)
 		return (NULL);
-	_strcpy(tmp_path, path);
 	head = NULL;
 	dirs = handle_split(tmp_path, ":");
+	free(tmp_path);
 	if (!dirs)
 	{
-		free(tmp_path);
 		return (NULL);
 	}
 	for (idx = 0; dirs[idx]; idx++)
@@ -64,7 +63,6 @@ node_t *get_dir(char *path)
 			return (NULL);
 		}	
 	}
-	free(tmp_path);
 	free(dirs);
 	return (head);
 }
@@ -84,4 +82,56 @@ void free_list(node_t *head)
 		free(head);
 		head = next;
 	}
+}
+
+/**
+ * populate_path_dir - Copies path but also replaces leading/sandwiched/trailing
+ *		   colons (:) with current working directory
+ */
+char *populate_path_dir(char *path)
+{
+	int i, len;
+	char *tmp_path, *pwd;
+
+	len = 0;
+	pwd = *(get_env("PWD")) + 4;
+	for (i = 0; path[i]; i++)
+	{
+		if (path[i] == ':')
+		{
+			if (path[i + 1] == ':' || i == 0 || path[i + 1] == '\0')
+				len += _strlen(pwd) + 1;
+			else
+				len++;
+		}
+		else
+			len;
+	}
+	tmp_path = malloc(sizeof(char) * (len + 1));
+	if (!tmp_path)
+		return (NULL);
+	tmp_path[0] = '\0';
+	for (i = 0; path[i]; i++)
+	{
+		if (path[i] == ':')
+		{
+			if (i == 0)
+			{
+				_strcat(tmp_path, pwd);
+				_strcat(tmp_path, ":");
+			}
+			else if (path[i + 1] == ':' || path[i + 1] == '\0')
+			{
+				_strcat(tmp_path, ":");
+				_strcat(tmp_path, pwd);
+			}
+			else
+				_strcat(tmp_path, ":");
+		}
+		else
+		{
+			_strncat(tmp_path, &path[i], 1);
+		}
+	}
+	return (tmp_path);
 }
