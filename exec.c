@@ -1,12 +1,12 @@
 #include "shell.h"
 
-int exec(char **arg, char *name, int hist)
+int exec(char **argv, char *name, int hist)
 {
 	pid_t pid_child;
 	int status, flag, ex_val;
 	char *cmd;
        
-	cmd = *arg;
+	cmd = *argv;
 	flag = 0;
 	if (*cmd != '.' && *cmd != '/')
 	{
@@ -27,16 +27,16 @@ int exec(char **arg, char *name, int hist)
 		if (!cmd || (access(cmd, F_OK) == -1))
 		{
 			if (errno == EACCES)
-				_exit(create_err(name, hist, *argv, 126));
+				_exit(create_err(name, hist, argv, 126));
 			else
-				_exit(create_err(name, hist, *argv, 127));
-			return(create_err(name, hist, *arg, 127));
+				_exit(create_err(name, hist, argv, 127));
+			return(create_err(name, hist, argv, 127));
 		}
 		/*if (access(cmd, X_OK) == -1)
 			return (create_err(name, hist, *arg, 126));*/
 		execve(cmd, argv, NULL);
 		if (errno == EACCES)
-			_exit(create_err(name, hist, *argv, 126));
+			_exit(create_err(name, hist, argv, 126));
 	}
 	else
 	{
@@ -61,7 +61,7 @@ int handle_args(char *name, int *hist)
 	char **args, *line_ptr;
 	int (*builtin)(char **argv);
 
-	line = NULL;
+	line_ptr = NULL;
 	idx = 0;
 	read = getline(&line_ptr, &idx, stdin);
 	if (read == -1)
@@ -71,14 +71,14 @@ int handle_args(char *name, int *hist)
 	}
 	if (read == 1)
 	{
-		if (isatty(STDIN_FILENO)
+		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, "$ ", 2);
 		free(line_ptr);
 		return (handle_args(name, hist));
 	}
 	line_ptr[read - 1] = '\0';
 
-	args = handle_split(line, " ");
+	args = handle_split(line_ptr, " ");
 	free(line_ptr);
 	if (!args)
 		return (0);

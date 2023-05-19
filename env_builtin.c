@@ -39,7 +39,7 @@ int set_env(char **args)
 	char **env_var, *new_value;
 	size_t size;
 	int index;
-	char *new_environ;
+	char **new_environ;
 
 	env_var = NULL;
 	if (!args[0] || !args[1])
@@ -51,7 +51,7 @@ int set_env(char **args)
 	_strcat(new_value, "=");
 	_strcat(new_value, args[1]);
 
-	env_var = _getenv(args[0]);
+	env_var = get_env(args[0]);
 	if (env_var)
 	{
 		free(*env_var);

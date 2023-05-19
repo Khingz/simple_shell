@@ -37,11 +37,11 @@ char **copy_env(void)
 
 	for (idx = 0; environ[idx]; idx++)
 	{
-		new_env[idx] = malloc(_strlen(env[idx]) + 1);
+		new_env[idx] = malloc(_strlen(environ[idx]) + 1);
 		if (!new_env[idx])
 		{
 			for (idx--; idx >= 0; idx--)
-				free(new_envn[idx]);
+				free(new_env[idx]);
 			free(new_env);
 			return (NULL);
 		}

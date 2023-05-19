@@ -4,7 +4,7 @@
  * sig_handler - handles new prompt upon a signal.
  * @signal: signal.
  */
-void handle_signal(int signal)
+void handle_signal(int sig)
 {
 	char *prompt = "\n$ ";
 	(void)sig;

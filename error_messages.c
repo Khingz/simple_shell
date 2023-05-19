@@ -39,7 +39,7 @@ char *err_127(char *name, int hist, char **argv)
 	if (!str_his)
 		return (NULL);
 
-	len = _strlen(name) + 2 + _strlen(str_his) + 2 + _strlen(*argv) + 2 + 10
+	len = _strlen(name) + 2 + _strlen(str_his) + 2 + _strlen(*argv) + 2 + 10;
 	err = malloc(sizeof(char) * (len + 1));
 
 	if (!err)
@@ -95,7 +95,7 @@ char *err_exit(char *name, int hist, char **argv)
 	return (err);
 }
 
-char *error_env(char *name, int hist, char **args)
+char *err_env(char *name, int hist, char **argv)
 {
 	char *err, *str_his;
 	int len;
@@ -125,7 +125,7 @@ char *error_env(char *name, int hist, char **args)
 	return (err);
 }
 
-char *err_cd(char *name, int hist, char **args)
+char *err_cd(char *name, int hist, char **argv)
 {
 	char *err, *str_his;
 	int len;

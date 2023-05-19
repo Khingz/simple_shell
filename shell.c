@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	{
 		while (ex_val == 0)
 		{
-			ex_val = handle_args(argv, &hist);
+			ex_val = handle_args(name, &hist);
 			if (ex_val == -2)
 				return (0);
 		}

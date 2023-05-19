@@ -44,14 +44,18 @@ void free_list(node_t *head);
 char **handle_split(char *line, char *delim);
 char **clear_input(char **argv);
 int exec(char **arg, char *name, int hist);
-int create_err(char *name, int hist, char *args, int error);
+int create_err(char *name, int hist, char **args, int error);
 //int execute_args(char **argv, char *name, int *hist);
 //int _get_args(char **argv);
 void handle_signal(int signal);
-char ** copy_env(void);
+char **copy_env(void);
 void free_env(void);
 int handle_args(char *name, int *hist);
 char *populate_path_dir(char *path);
+char **get_env(const char *name);
+int set_env(char **args);
+int unset_env(char **args);
+int ch_cd(char **args);
 
 /** string helper funcions */
 int _strlen(const char *s);
@@ -70,6 +74,7 @@ char *err_exit(char *name, int hist, char **argv);
 char *err_126(char *name, int hist, char **argv);
 char *err_127(char *name, int hist, char **argv);
 char *err_cd(char *name, int hist, char **args);
+char *err_env(char *name, int hist, char **args);
 
 /* Builtin */
 int exit_shell(char **argv);

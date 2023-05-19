@@ -3,10 +3,10 @@
 int (*_getbuiltin(char *cmd))(char **argv)
 {
 	builtin_t b_func[] = {
-		{"exit", shellby_exit},
-		{ "setenv", shellby_setenv },
-		{ "unsetenv", shellby_unsetenv },
-		{ "cd", shellby_cd },
+		{"exit", exit_shell},
+		{ "setenv", set_env },
+		{ "unsetenv", unset_env },
+		{ "cd", ch_cd },
 		{NULL, NULL}
 	};
 	int i;
@@ -61,8 +61,8 @@ int ch_cd(char **args)
 	struct stat dir;
 	char **dir_inf;
 
-	old_pwd = pwd = NULL
-	old_pwd = get_cwd(old_pwd, 0);
+	old_pwd = pwd = NULL;
+	old_pwd = getcwd(old_pwd, 0);
 	if (!old_pwd)
 		return (-1);
 
@@ -85,7 +85,7 @@ int ch_cd(char **args)
 	else
 		chdir(*(get_env("HOME")) + 5);
 
-	pwd = get_cwd(pwd, 0);
+	pwd = getcwd(pwd, 0);
 	if (!pwd)
 		return (-1);
 
@@ -105,6 +105,6 @@ int ch_cd(char **args)
 
 	free(old_pwd);
 	free(pwd);
-	ree(dir_info);
+	free(dir_inf);
 	return (0);
 }

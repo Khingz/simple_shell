@@ -1,19 +1,19 @@
 #include "shell.h"
 
-int create_err(char *name, int hist, char *argv, int error)
+int create_err(char *name, int hist, char **argv, int error)
 {
 	char *_err;
 
 	switch (error)
 	{
 		case -1:
-			_err = err_env(name, hist, args);
+			_err = err_env(name, hist, argv);
 			break;
 		case 2:
-			if (*(args[0]) == 'e')
-				error = error_2(name, hist, args);
+			if (*(argv[0]) == 'e')
+				_err = err_exit(name, hist, argv);
 			else
-				error = error_2cd(name, hist, args);
+				_err = err_cd(name, hist, argv);
 			break;
 		case 126:
 			_err = err_126(name, hist, argv);
