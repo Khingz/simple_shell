@@ -1,5 +1,8 @@
 #include "shell.h"
 
+int _token_len(char *str, char *delim);
+int _token_num(char *s, char *delim);
+
 /**
  * handle_split - adds token a string.
  * @line: the string.
@@ -9,41 +12,80 @@
 char **handle_split(char *line, char *delim)
 {
 	char **ptr;
-	int idx;
-	char *token;
-	size_t word_num;
+	int token, lett, idx, x, y;
 
-	word_num = 0;
-	for (idx = 0; line[idx]; idx++)
-	{
-		if (ine[index + 1] == *delim ||
-			    line[index + 1] == '\n' ||
-			    (line[index + 1] == '\0' && line[index] != '\n'))
-				word_num++;
-	}
-	if (!word_num)
+	idx = 0;
+	token = _token_num(line, delim);
+	if (token == 0)
 		return (NULL);
-	if (line[idx - 1] == '\n')
-		line[idx - 1] = '\0';
-	ptr = malloc(sizeof(char *) * (word_num + 1));
+	ptr = malloc(sizeof(char *) * (token + 1));
 	if (!ptr)
 	{
 		return (NULL);
 	}
-	token = strtok(line, delim);
-	for (idx = 0; token != NULL; idx++)
+	for (x = 0; x < token; x++)
 	{
-		ptr[idx] = malloc(_strlen(token) + 1);
-		if (!ptr[idx])
+		while (line[index] == *delim)
+			index++;
+		lett = _token_len(line + idx, delim);
+		ptr[x] = malloc(sizeof(char) * (lett + 1));
+		if (!ptr[x])
 		{
 			for (idx -= 1; idx >= 0; idx--)
 				free(ptr[idx]);
 			free(ptr);
 			return (NULL);
 		}
-		_strcpy(ptr[idx], token);
-		token = strtok(NULL, delim);
+		for (y = 0; y < lett; y++)
+		{
+			ptr[x][y] = line[idx];
+			idx++;
+		}
+
+		ptr[x][y] = '\0';
 	}
-	ptr[idx] = NULL;
+	ptr[x] = NULL;
 	return (ptr);
+}
+
+/**
+ * token_len - Locates the delimiter index marking the end
+ *             of the first token contained within a string.
+ */
+int _token_len(char *str, char *delim)
+{
+	int idx, len;
+
+	idx = len = 0;
+	while (*(s + idx) && *(s + idx) != *delim)
+	{
+		len++;
+		idx++;
+	}
+
+	return (len);
+}
+
+/**
+ * count_tokens - Counts the number of delimited
+ *                words contained within a string.
+ */
+int _token_num(char *s, char *delim)
+{
+	int idx, tokens, len;
+
+	len = tokens = idx = 0;
+	for (; *(s + idx); idx++)
+		len++;
+
+	for (idx = 0; idx < len; idx++)
+	{
+		if (*(s + idx) != *delim)
+		{
+			tokens++;
+			idx += _token_len(s + idx, delim);
+		}
+	}
+
+	return (tokens);
 }

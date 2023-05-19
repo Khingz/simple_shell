@@ -76,6 +76,7 @@ int handle_args(char *name, int *hist)
 		free(line_ptr);
 		return (handle_args(name, hist));
 	}
+	line_ptr[read - 1] = '\0';
 
 	args = handle_split(line, " ");
 	free(line_ptr);
