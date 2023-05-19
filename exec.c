@@ -49,7 +49,59 @@ int exec(char **arg, char *name, int hist)
 	return (ex_val);
 }
 
-char **clear_input(char **argv)
+
+/**
+ * handle_args - get cmd and calls the execution of a command.
+ */
+int handle_args(char *name, int *hist)
+{
+	int ex_val;
+	size_t idx;
+	ssize_t read;
+	char **args, *line_ptr;
+	int (*builtin)(char **argv);
+
+	line = NULL;
+	idx = 0;
+	read = getline(&line_ptr, &idx, stdin);
+	if (read == -1)
+	{
+		free(line_ptr);
+		return (-2);
+	}
+	if (read == 1)
+	{
+		if (!(isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "$ ", 2);
+		free(line_ptr);
+		return (handle_args(name, hist));
+	}
+
+	args = handle_split(line, " ");
+	free(line_ptr);
+	if (!args)
+		return (0);
+	builtin = get_builtin(args[0]);
+	if (builtin)
+	{
+		ex_val = builtin(args);
+		if (ex_val)
+			create_err(name, *hist, args, ret);
+	}
+	else
+		ex_val = exec(args, name, *hist);
+
+	(*hist)++;
+
+	for (idx = 0; args[idx]; idx++)
+		free(args[idx]);
+	free(args);
+
+	return (ex_val);
+}
+
+
+/**char **clear_input(char **argv)
 {
 	ssize_t read, n;
 	char *line_ptr;
@@ -128,3 +180,4 @@ int _get_args(char **argv)
 	free(args);
 	return (0);
 }
+*/

@@ -16,10 +16,15 @@ char **handle_split(char *line, char *delim)
 	word_num = 0;
 	for (idx = 0; line[idx]; idx++)
 	{
-		if (line[idx] != *delim && (line[idx + 1] == *delim || line[idx + 1] == '\0'))
+		if (ine[index + 1] == *delim ||
+			    line[index + 1] == '\n' ||
+			    (line[index + 1] == '\0' && line[index] != '\n'))
 				word_num++;
 	}
-	line[idx - 1] = '\0';
+	if (!word_num)
+		return (NULL);
+	if (line[idx - 1] == '\n')
+		line[idx - 1] = '\0';
 	ptr = malloc(sizeof(char *) * (word_num + 1));
 	if (!ptr)
 	{

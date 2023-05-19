@@ -14,7 +14,6 @@ int print_env(char **args)
 	int index;
 	char nc = '\n';
 
-	(void) args;
 	if (!environ)
 		return (-1);
 	for (index = 0; environ[index]; index++)
@@ -22,6 +21,7 @@ int print_env(char **args)
 		write(STDOUT_FILENO, environ[index], strlen(environ[index]));
 		write(STDOUT_FILENO, &nc, 1);
 	}
+	(void)args;
 	return (0);
 }
 
@@ -117,5 +117,53 @@ int unset_env(char **args)
 	environ = new_environ;
 	environ[size - 1] = NULL;
 
+	return (0);
+}
+
+/**
+ * shellby_cd - Changes the current directory of the shellby process.
+ * @args: An array of arguments.
+ *
+ * Return: If the given string is not a directory - 2.
+ *         If an error occurs - -1.
+ *         Otherwise - 0.
+ */
+int ch_cd(char **args)
+{
+	char *old_pwd, *pwd;
+	struct stat dir;
+
+	old_pwd = pwd = NULL
+	old_pwd = get_cwd(old_pwd, 0);
+	if (!old_pwd)
+		return (-1);
+
+	if (args[1])
+	{
+		if (*(args[1]) == '-')
+			chdir(*(get_env("OLDPWD")) + 7);
+		else
+		{
+			if (stat(args[1], &dir) == 0 && S_ISDIR(dir.st_mode))
+				chdir(args[1]);
+			else
+			{
+				free(old_pwd);
+				return (2);
+			}
+		}
+	}
+	else
+		chdir(*(get_env("HOME")) + 5);
+
+	pwd = get_cwd(pwd, 0);
+	if (!pwd)
+		return (-1);
+
+	set_env("OLDPWD", oldpwd, 1);
+	set_env("PWD", pwd, 1);
+
+	free(old_pwd);
+	free(pwd);
 	return (0);
 }

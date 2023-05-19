@@ -6,6 +6,7 @@ int (*_getbuiltin(char *cmd))(char **argv)
 		{"exit", shellby_exit},
 		{ "setenv", shellby_setenv },
 		{ "unsetenv", shellby_unsetenv },
+		{ "cd", shellby_cd },
 		{NULL, NULL}
 	};
 	int i;
