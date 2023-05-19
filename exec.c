@@ -84,7 +84,7 @@ int handle_args(char *name, int *hist)
 	builtin = get_builtin(args[0]);
 	if (builtin)
 	{
-		ex_val = builtin(args);
+		ex_val = builtin(args + 1);
 		if (ex_val)
 			create_err(name, *hist, args, ret);
 	}

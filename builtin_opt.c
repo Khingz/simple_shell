@@ -26,19 +26,20 @@ int exit_shell(char **argv)
 
 	if (argv[1])
 	{
-		if (argv[1][i] == '-')
+		if (argv[0][i] == '-')
 			sign = -1;
-		for (; argv[1][i]; i++)
+		for (; argv[0][i]; i++)
 		{
-			if (argv[1][i] == '-')
+			if (argv[0][i] == '-')
 				sign *= -1;
 
-			if (argv[1][i] >= '0' && argv[1][i] <= '9')
-				num = (num * 10) + (argv[1][i] - '0');
+			if (argv[0][i] >= '0' && argv[0][i] <= '9')
+				num = (num * 10) + (argv[0][i] - '0');
 			else
 				return (2);
 		}
 	}
+	argv -= 1;
 	for (i = 0; argv[i]; i++)
 		free(argv[i]);
 	free(argv);

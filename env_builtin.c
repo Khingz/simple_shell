@@ -40,16 +40,16 @@ int set_env(char **args)
 	size_t size;
 	int index;
 
-	if (!args[1] || !args[2])
+	if (!args[0] || !args[1])
 		return (-1);
-	new_value = malloc(_strlen(args[1]) + 1 + _strlen(args[2]) + 1);
+	new_value = malloc(_strlen(args[0]) + 1 + _strlen(args[1]) + 1);
 	if (!new_value)
 		return (-1);
-	_strcpy(new_value, args[1]);
+	_strcpy(new_value, args[0]);
 	_strcat(new_value, "=");
-	_strcat(new_value, args[2]);
+	_strcat(new_value, args[1]);
 
-	env_var = _getenv(args[1]);
+	env_var = _getenv(args[0]);
 	if (env_var)
 	{
 		free(*env_var);
@@ -90,9 +90,9 @@ int unset_env(char **args)
 	size_t size;
 	int index, index2;
 
-	if (!args[1])
+	if (!args[0])
 		return (-1);
-	env_var = _getenv(args[1]);
+	env_var = get_env(args[0]);
 	if (!env_var)
 		return (0);
 
@@ -132,20 +132,22 @@ int ch_cd(char **args)
 {
 	char *old_pwd, *pwd;
 	struct stat dir;
+	char **dir_inf;
 
 	old_pwd = pwd = NULL
 	old_pwd = get_cwd(old_pwd, 0);
 	if (!old_pwd)
 		return (-1);
 
-	if (args[1])
+	if (args[0])
 	{
-		if (*(args[1]) == '-')
+		if (*(args[0]) == '-')
 			chdir(*(get_env("OLDPWD")) + 7);
 		else
 		{
-			if (stat(args[1], &dir) == 0 && S_ISDIR(dir.st_mode))
-				chdir(args[1]);
+			if (stat(args[0], &dir) == 0 && S_ISDIR(dir.st_mode)
+					&& ((dir.st_mode & S_IXUSR) != 0))
+				chdir(args[0]);
 			else
 			{
 				free(old_pwd);
@@ -160,10 +162,22 @@ int ch_cd(char **args)
 	if (!pwd)
 		return (-1);
 
-	set_env("OLDPWD", oldpwd, 1);
-	set_env("PWD", pwd, 1);
+	dir_inf = malloc(sizeof(char *) * 2);
+	if (!dir_inf)
+		return (-1);
+
+	dir_inf[0] = "OLDPWD";
+	dir_inf[1] = old_pwd;
+	if (set_env(dir_inf) == -1)
+		return (-1);
+
+	dir_inf[0] = "PWD";
+	dir_inf[1] = pwd;
+	if (set_env(dir_inf) == -1)
+		return (-1);
 
 	free(old_pwd);
 	free(pwd);
+	ree(dir_info);
 	return (0);
 }
