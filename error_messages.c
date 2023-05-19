@@ -82,3 +82,33 @@ char *err_2(char *name, int hist, char **argv)
 
 	return (err);
 }
+
+char *error_env(char *name, int hist, char **args)
+{
+	char *err, *str_his;
+	int len;
+
+	str_his = _itoa(hist);
+	if (!str_his)
+		return (NULL);
+
+	len = _strlen(name) + _strlen(str_his) + _strlen(*argv) + 45;
+	err = malloc(sizeof(char) * (len + 1));
+
+	if (!err)
+	{
+		free(str_his);
+		return (NULL);
+	}
+
+	_strcpy(err, name);
+	_strcat(err, ": ");
+	_strcat(err, str_his);
+	_strcat(err, ": ");
+	_strcat(err, *argv);
+	_strcat(err, ": ");
+	_strcat(err, "Unable to add/remove from environment\n");
+
+	free(str_his);
+	return (err);
+}

@@ -37,9 +37,6 @@ typedef struct builtin_s
 } builtin_t;
 
 /* function prototypes */
-char *get_env(const char *name);
-int set_env(const char *name, const char *value, int overwrite);
-int unset_env(const char *name);
 node_t *get_dir(char *path);
 char *get_loc(char *cmd);
 node_t *add_node_end(node_t **head, char *dir);

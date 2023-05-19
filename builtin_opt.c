@@ -3,7 +3,10 @@
 int (*_getbuiltin(char *cmd))(char **argv)
 {
 	builtin_t b_func[] = {
-		{ "exit", shellby_exit }
+		{"exit", shellby_exit},
+		{ "setenv", shellby_setenv },
+		{ "unsetenv", shellby_unsetenv },
+		{NULL, NULL}
 	};
 	int i;
 

@@ -6,6 +6,9 @@ int create_err(char *name, int hist, char *argv, int error)
 
 	switch (error)
 	{
+		case -1:
+			_err = err_env(name, hist, args);
+			break;
 		case 2:
 			_err = err_2(name, hist, argv);
 			break;
@@ -16,7 +19,7 @@ int create_err(char *name, int hist, char *argv, int error)
 			_err = err_127(name, hist, argv);
 			break;
 	}
-	write(STDERR_FILENO, _err, strlen(error));
+	write(STDERR_FILENO, _err, strlen(_err));
 
 	if (_err)
 		free(_err);
