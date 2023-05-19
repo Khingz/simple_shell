@@ -66,7 +66,7 @@ int _strncmp(const char *s1, const char *s2, size_t n);
 /* Error helpers */
 int num_length(int num);
 char *_itoa(int num);
-char *err_2(char *name, int hist, char **argv);
+char *err_exit(char *name, int hist, char **argv);
 char *err_126(char *name, int hist, char **argv);
 char *err_127(char *name, int hist, char **argv);
 char *err_cd(char *name, int hist, char **args);

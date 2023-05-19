@@ -2,8 +2,8 @@
 
 int exec(char **arg, char *name, int hist)
 {
-	pid_t pid_child, ex_val;
-	int status, flag;
+	pid_t pid_child;
+	int status, flag, ex_val;
 	char *cmd;
        
 	cmd = *arg;
@@ -71,7 +71,7 @@ int handle_args(char *name, int *hist)
 	}
 	if (read == 1)
 	{
-		if (!(isatty(STDIN_FILENO))
+		if (isatty(STDIN_FILENO)
 			write(STDOUT_FILENO, "$ ", 2);
 		free(line_ptr);
 		return (handle_args(name, hist));
@@ -82,12 +82,12 @@ int handle_args(char *name, int *hist)
 	free(line_ptr);
 	if (!args)
 		return (0);
-	builtin = get_builtin(args[0]);
+	builtin = _getbuiltin(args[0]);
 	if (builtin)
 	{
 		ex_val = builtin(args + 1);
 		if (ex_val)
-			create_err(name, *hist, args, ret);
+			create_err(name, *hist, args, ex_val);
 	}
 	else
 		ex_val = exec(args, name, *hist);

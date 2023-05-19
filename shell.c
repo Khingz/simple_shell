@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	{
 		while (ex_val == 0)
 		{
-			ex_val = execute_args(argv, name, &hist);
+			ex_val = handle_args(argv, &hist);
 			if (ex_val == -2)
 				return (0);
 		}
@@ -36,10 +36,11 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		write(STDOUT_FILENO, prmpt, 2);
-		ex_val = execute_args(argv, name, &hist);
+		ex_val = handle_args(name, &hist);
 		if (ex_val == -2)
 		{
 			write(STDOUT_FILENO, "\n", 1);
+			free_env();
 			exit(0);
 		}
 	}

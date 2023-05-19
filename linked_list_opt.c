@@ -8,9 +8,10 @@
  */
 node_t *add_node_end(node_t **head, char *dir)
 {
-	node_t *new_node = malloc(sizeof(node_t));
 	node_t *last;
-
+	node_t *new_node;
+       
+	new_node = malloc(sizeof(node_t));
 	if (!new_node)
 		return (NULL);
 
@@ -44,10 +45,10 @@ node_t *get_dir(char *path)
 	node_t *head;
 	char *tmp_path;
        
+	head = NULL;
 	tmp_path = populate_path_dir(path);
 	if (!tmp_path)
 		return (NULL);
-	head = NULL;
 	dirs = handle_split(tmp_path, ":");
 	free(tmp_path);
 	if (!dirs)
@@ -105,7 +106,7 @@ char *populate_path_dir(char *path)
 				len++;
 		}
 		else
-			len;
+			len++;
 	}
 	tmp_path = malloc(sizeof(char) * (len + 1));
 	if (!tmp_path)

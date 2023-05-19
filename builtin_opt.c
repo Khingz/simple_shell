@@ -46,3 +46,65 @@ int exit_shell(char **argv)
 	free_env();
 	exit(num * sign);
 }
+
+/**
+ * shellby_cd - Changes the current directory of the shellby process.
+ * @args: An array of arguments.
+ *
+ * Return: If the given string is not a directory - 2.
+ *         If an error occurs - -1.
+ *         Otherwise - 0.
+ */
+int ch_cd(char **args)
+{
+	char *old_pwd, *pwd;
+	struct stat dir;
+	char **dir_inf;
+
+	old_pwd = pwd = NULL
+	old_pwd = get_cwd(old_pwd, 0);
+	if (!old_pwd)
+		return (-1);
+
+	if (args[0])
+	{
+		if (*(args[0]) == '-')
+			chdir(*(get_env("OLDPWD")) + 7);
+		else
+		{
+			if (stat(args[0], &dir) == 0 && S_ISDIR(dir.st_mode)
+					&& ((dir.st_mode & S_IXUSR) != 0))
+				chdir(args[0]);
+			else
+			{
+				free(old_pwd);
+				return (2);
+			}
+		}
+	}
+	else
+		chdir(*(get_env("HOME")) + 5);
+
+	pwd = get_cwd(pwd, 0);
+	if (!pwd)
+		return (-1);
+
+	dir_inf = malloc(sizeof(char *) * 2);
+	if (!dir_inf)
+		return (-1);
+
+	dir_inf[0] = "OLDPWD";
+	dir_inf[1] = old_pwd;
+	if (set_env(dir_inf) == -1)
+		return (-1);
+
+	dir_inf[0] = "PWD";
+	dir_inf[1] = pwd;
+	if (set_env(dir_inf) == -1)
+		return (-1);
+
+	free(old_pwd);
+	free(pwd);
+	ree(dir_info);
+	return (0);
+}

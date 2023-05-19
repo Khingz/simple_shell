@@ -25,8 +25,8 @@ char **handle_split(char *line, char *delim)
 	}
 	for (x = 0; x < token; x++)
 	{
-		while (line[index] == *delim)
-			index++;
+		while (line[idx] == *delim)
+			idx++;
 		lett = _token_len(line + idx, delim);
 		ptr[x] = malloc(sizeof(char) * (lett + 1));
 		if (!ptr[x])
@@ -52,7 +52,7 @@ char **handle_split(char *line, char *delim)
  * token_len - Locates the delimiter index marking the end
  *             of the first token contained within a string.
  */
-int _token_len(char *str, char *delim)
+int _token_len(char *s, char *delim)
 {
 	int idx, len;
 
