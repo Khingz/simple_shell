@@ -36,7 +36,7 @@ char **clear_input(char **argv);
 int exec(char **arg, char *name, int hist);
 int create_err(char *name, int hist, char *cmd, int error);
 int execute_args(char **argv, char *name, int *hist);
-char **_get_args(char **argv);
+int _get_args(char **argv);
 void handle_signal(int signal);
 
 /** string helper funcions */
