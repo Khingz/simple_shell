@@ -56,6 +56,7 @@ char **get_env(const char *name);
 int set_env(char **args);
 int unset_env(char **args);
 int ch_cd(char **args);
+void space_handler(char **line, ssize_t read);
 
 /** string helper funcions */
 int _strlen(const char *s);
@@ -85,5 +86,11 @@ char *get_env_val(char *var);
 void replace_var(char **line, int *exe_ex_val);
 char *get_current_pid(void);
 void free_args(char **args);
+
+/* get line */
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+void reassign_lineptr(char **lineptr, size_t *n, char *buff, size_t x);
+
 
 #endif

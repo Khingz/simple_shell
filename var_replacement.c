@@ -35,13 +35,18 @@ char *get_current_pid(void)
  * get_env_value - Gets the value corresponding to the environment variable.
  * @var: The environment variable to search for.
  */
-char *get_env_val(char *var)
+char *get_env_val(char *proximal, int len)
 {
-	char *sub, *tmp;
+	char *sub, *tmp, *var;
 	char **var_loc;
 
+	var = malloc(len + 1);
+	if (!var)
+		return (NULL);
+	var[0] = '\0';
+	_strncat(var, proximal, len);
 	var_loc = get_env(var);
-
+	free(var);
 	if (var_loc)
 	{
 		tmp= *var_loc
@@ -68,14 +73,15 @@ char *get_env_val(char *var)
 void replace_var(char **line, int *exe_ex_val)
 {
 	int len, y, z;
-	char *var, *sub, *line_old, line_new;
+	char *sub, *line_old, line_new;
 
 	x = y = z = 0;
 	sub = var = NULL;
 	line_old = *line;
 	for (y = 0; line_old[y]; y++)
 	{
-		if (line_old[y] == '$' && line_old[y + 1])
+		if (line_old[y] == '$' && line_old[y + 1] &&
+				line_old[y + 1] != ' ')
 		{
 			if (line_old[y] == '$' && line_old[y + 1])
 		{
@@ -96,13 +102,7 @@ void replace_var(char **line, int *exe_ex_val)
 						line_old[z] != ' '; z++)
 					;
 				len = z - (y + 1);
-				var = malloc(len + 1);
-				if (!var)
-					return;
-				var[0] = '\0';
-				_strncat(var, &line_old[y + 1], len);
-				sub = get_env_val(var);
-				free(var);
+				sub = get_env_val(&line_old[y + 1], len);
 			}
 			line_new = malloc(y + _strlen(sub) + _strlen(&line_old[z]) + 1);
 			if (!line_new)
@@ -117,7 +117,7 @@ void replace_var(char **line, int *exe_ex_val)
 			}
 			_strcat(line_new, &line_old[z]);
 			free(line_old);
-			*args = line_new;
+			*line = line_new;
 			line_new = line_new;
 			y = -1;
 		}
