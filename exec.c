@@ -48,7 +48,6 @@ int exec(char **argv, char *name, int hist)
 		wait(&status);
 		ex_val = WEXITSTATUS(status);
 	}
-
 	if (flag)
 		free(cmd);
 	return (ex_val);
@@ -82,7 +81,7 @@ int handle_args(char *name, int *hist, int *exe_ex_val)
 		return (handle_args(name, hist, exe_ex_val));
 	}
 	line_ptr[read - 1] = '\0';
-	replace_variable(args, exe_ex_val);
+	replace_var(args, exe_ex_val);
 	args = handle_split(line_ptr, " ");
 	free(line_ptr);
 	if (!args)
@@ -91,7 +90,7 @@ int handle_args(char *name, int *hist, int *exe_ex_val)
 	if (builtin)
 	{
 		ex_val = builtin(args + 1);
-		if (ret != -3)
+		if (ex_val != -3)
 		{
 			*exe_ex_val = ex_val;
 			if (ex_val != -3 && ex_val != 0)
@@ -100,8 +99,9 @@ int handle_args(char *name, int *hist, int *exe_ex_val)
 	}
 	else
 	{
-		exe_ex_val = exec(args, name, *hist);
+		*exe_ex_val = exec(args, name, *hist);
 		ex_val = *exe_ex_val;
+	}
 
 	(*hist)++;
 	free_args(args);

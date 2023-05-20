@@ -49,7 +49,7 @@ char *get_env_val(char *proximal, int len)
 	free(var);
 	if (var_loc)
 	{
-		tmp= *var_loc
+		tmp= *var_loc;
 		while (*tmp != '=')
 			tmp++;
 		tmp++;
@@ -73,17 +73,14 @@ char *get_env_val(char *proximal, int len)
 void replace_var(char **line, int *exe_ex_val)
 {
 	int len, y, z;
-	char *sub, *line_old, line_new;
+	char *sub, *line_old, *line_new, *var;
 
-	x = y = z = 0;
+	y = z = 0;
 	sub = var = NULL;
 	line_old = *line;
 	for (y = 0; line_old[y]; y++)
 	{
-		if (line_old[y] == '$' && line_old[y + 1] &&
-				line_old[y + 1] != ' ')
-		{
-			if (line_old[y] == '$' && line_old[y + 1])
+		if (line_old[y] == '$' && line_old[y + 1])
 		{
 			if (line_old[y + 1] == '$')
 			{
@@ -134,7 +131,7 @@ void free_args(char **args)
 	x = 0;
 	while (args[x])
 	{
-		free(args[x];
+		free(args[x]);
 		x++;
 	}
 	free(args);

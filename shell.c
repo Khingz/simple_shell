@@ -53,5 +53,5 @@ int main(int argc, char *argv[])
 		}
 	}
 	free_env();
-	return (exe_ex_val);
+	return (*exe_ex_val);
 }
