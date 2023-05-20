@@ -65,58 +65,61 @@ char *get_env_val(char *var)
  * variable_replacement - Replaces $$ with current PID, $? with the return
  * /exit value of the last program exeucted. Environment variables names
  */
-void replace_var(char **args, int *exe_ex_val)
+void replace_var(char **line, int *exe_ex_val)
 {
-	int len, x, y, z;
-	char *var, *sub, *line;
+	int len, y, z;
+	char *var, *sub, *line_old, line_new;
 
 	x = y = z = 0;
-	sub = var = line = NULL;
-	for (x = 0; args[x]; x++)
+	sub = var = NULL;
+	line_old = *line;
+	for (y = 0; line_old[y]; y++)
 	{
-		for (y = 0; args[x][y]; y++)
+		if (line_old[y] == '$' && line_old[y + 1])
 		{
-			if (args[x][y] == '$' && args[x][y + 1])
+			if (line_old[y] == '$' && line_old[y + 1])
+		{
+			if (line_old[y + 1] == '$')
 			{
-				if (args[x][y + 1] == '$')
-				{
-					sub = get_pid();
-					z = y + 2;
-				}
-				else if (args[x][y + 1] == '?')
-				{
-					sub = _itoa(exe_ex_val);
-					z = y + 2;
-				}
-				else if (args[x][y + 1])
-				{
-					for (z = y + 1; args[x][z] && args[x][z] != '$'; z++)
-						;
-					len = z - (y + 1);
-					var = malloc(len + 1);
-					if (!var)
-						return;
-					var[0] = '\0';
-					_strncat(var, &args[i][j + 1], len);
-					sub = get_env_val(var);
-					free(var);
-				}
-				line = malloc(y + _strlen(sub) + _strlen(&args[x][z]) + 1);
-				if (!line)
-					return;
-				line[0] = '\0';
-				_strncat(line, args[x], y);
-				if (sub)
-				{
-					_strcat(line, sub);
-					free(sub);
-					sub = NULL;
-				}
-				_strcat(line, &args[x][z]);
-				free(args[x]);
-				args[x] = line;
-				y = -1;
+				sub = get_current_pid();
+				z = y + 2;
 			}
+			else if (line_old[y + 1] == '?')
+			{
+				sub = _itoa(*exe_ex_val);
+				z = y + 2;
+			}
+			else if (line_old[y + 1])
+			{
+				for (z = y + 1; line_old[z] &&
+						line_old[z] != '$' &&
+						line_old[z] != ' '; z++)
+					;
+				len = z - (y + 1);
+				var = malloc(len + 1);
+				if (!var)
+					return;
+				var[0] = '\0';
+				_strncat(var, &line_old[y + 1], len);
+				sub = get_env_val(var);
+				free(var);
+			}
+			line_new = malloc(y + _strlen(sub) + _strlen(&line_old[z]) + 1);
+			if (!line_new)
+				return;
+			line_new[0] = '\0';
+			_strncat(line_new, line_old, y);
+			if (sub)
+			{
+				_strcat(line_new, sub);
+				free(sub);
+				sub = NULL;
+			}
+			_strcat(line_new, &line_old[z]);
+			free(line_old);
+			*args = line_new;
+			line_new = line_new;
+			y = -1;
 		}
 	}
 }

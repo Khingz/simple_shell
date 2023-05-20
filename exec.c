@@ -82,12 +82,11 @@ int handle_args(char *name, int *hist, exe_ex_val)
 		return (handle_args(name, hist, exe_ex_val));
 	}
 	line_ptr[read - 1] = '\0';
-
+i	replace_variable(args, exe_ex_val);
 	args = handle_split(line_ptr, " ");
 	free(line_ptr);
 	if (!args)
 		return (0);
-	replace_variable(args, exe_ex_val);
 	builtin = _getbuiltin(args[0]);
 	if (builtin)
 	{
