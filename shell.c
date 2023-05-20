@@ -18,8 +18,14 @@ int main(int argc, char *argv[])
 	prmpt = "$ ";
 	name = *argv;
 	ex_val = 0;
+	environ = copy_env();
+	if (!environ)
+		exit(-100);
 	if (argc != 1)
+	{
+		free_env();
 		return (exec(argv + 1, name, hist));
+	}
 	if (!isatty(STDIN_FILENO))
 	{
 		while (ex_val == 0)
@@ -28,11 +34,9 @@ int main(int argc, char *argv[])
 			if (ex_val == -2)
 				return (0);
 		}
+		free_env();
 		return (ex_val);
 	}
-	environ = copy_env();
-	if (!environ)
-		exit(-100);
 	while (1)
 	{
 		write(STDOUT_FILENO, prmpt, 2);
@@ -44,5 +48,6 @@ int main(int argc, char *argv[])
 			exit(0);
 		}
 	}
+	free_env();
 	return (ex_val);
 }
