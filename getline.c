@@ -5,7 +5,7 @@
  */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
-	char *tmp_copy, *filler;
+	char *tmp_ptr, *filler;
 	unsigned int idx;
 	void *memory;
 
@@ -28,7 +28,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 	}
 
 	tmp_ptr = ptr;
-	memory = malloc(sizeof(*ptr_copy) * new_size);
+	memory = malloc(sizeof(*tmp_ptr) * new_size);
 	if (memory == NULL)
 	{
 		free(ptr);
@@ -115,7 +115,7 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 	}
 	buffer[input] = '\0';
 
-	assign_lineptr(lineptr, n, buffer, input);
+	reassign_lineptr(lineptr, n, buffer, input);
 
 	ret = input;
 	if (r != 0)

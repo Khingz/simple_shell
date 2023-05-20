@@ -58,7 +58,7 @@ int exec(char **argv, char *name, int hist)
 /**
  * handle_args - get cmd and calls the execution of a command.
  */
-int handle_args(char *name, int *hist, exe_ex_val)
+int handle_args(char *name, int *hist, int *exe_ex_val)
 {
 	int ex_val;
 	size_t idx;
@@ -82,7 +82,7 @@ int handle_args(char *name, int *hist, exe_ex_val)
 		return (handle_args(name, hist, exe_ex_val));
 	}
 	line_ptr[read - 1] = '\0';
-i	replace_variable(args, exe_ex_val);
+	replace_variable(args, exe_ex_val);
 	args = handle_split(line_ptr, " ");
 	free(line_ptr);
 	if (!args)
