@@ -82,6 +82,7 @@ int handle_args(char *name, int *hist)
 	free(line_ptr);
 	if (!args)
 		return (0);
+	replace_variable(args);
 	builtin = _getbuiltin(args[0]);
 	if (builtin)
 	{

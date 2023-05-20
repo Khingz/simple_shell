@@ -80,4 +80,9 @@ char *err_env(char *name, int hist, char **args);
 int exit_shell(char **argv);
 int (*_getbuiltin(char *cmd))(char **argv);
 
+/* Var replacement */
+char *get_env_val(char *var);
+void replace_var(char **args);
+char *get_current_pid(void);
+
 #endif
