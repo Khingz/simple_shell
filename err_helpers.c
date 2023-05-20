@@ -17,7 +17,7 @@ int num_length(int num)
 	while (tmp_num > 9)
 	{
 		len++;
-		num1 /= 10;
+		tmp_num /= 10;
 	}
 	return (len);
 }
@@ -45,7 +45,7 @@ char *_itoa(int num)
 
 	len--;
 	do {
-		buf[len] = (tmp_num % 10) + '0';
+		buff[len] = (tmp_num % 10) + '0';
 		tmp_num /= 10;
 		len--;
 	} while(tmp_num > 0);
