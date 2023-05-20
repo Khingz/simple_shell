@@ -65,11 +65,10 @@ char *get_env_val(char *var)
  * variable_replacement - Replaces $$ with current PID, $? with the return
  * /exit value of the last program exeucted. Environment variables names
  */
-void replace_var(char **args)
+void replace_var(char **args, int *exe_ex_val)
 {
-	int x, y, z;
+	int len, x, y, z;
 	char *var, *sub, *line;
-	int ex_val, len;
 
 	x = y = z = 0;
 	sub = var = line = NULL;
@@ -86,8 +85,7 @@ void replace_var(char **args)
 				}
 				else if (args[x][y + 1] == '?')
 				{
-					ex_val = -100;
-					sub = _itoa(ex_val);
+					sub = _itoa(exe_ex_val);
 					z = y + 2;
 				}
 				else if (args[x][y + 1])

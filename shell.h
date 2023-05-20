@@ -50,7 +50,7 @@ int create_err(char *name, int hist, char **args, int error);
 void handle_signal(int signal);
 char **copy_env(void);
 void free_env(void);
-int handle_args(char *name, int *hist);
+int handle_args(char *name, int *hist, int *exe_ex_val);
 char *populate_path_dir(char *path);
 char **get_env(const char *name);
 int set_env(char **args);
@@ -82,7 +82,7 @@ int (*_getbuiltin(char *cmd))(char **argv);
 
 /* Var replacement */
 char *get_env_val(char *var);
-void replace_var(char **args);
+void replace_var(char **args, int *exe_ex_val);
 char *get_current_pid(void);
 
 #endif
