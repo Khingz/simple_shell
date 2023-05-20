@@ -84,5 +84,6 @@ int (*_getbuiltin(char *cmd))(char **argv);
 char *get_env_val(char *var);
 void replace_var(char **args, int *exe_ex_val);
 char *get_current_pid(void);
+void free_args(char **args);
 
 #endif

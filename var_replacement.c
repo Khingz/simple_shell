@@ -120,3 +120,19 @@ void replace_var(char **args, int *exe_ex_val)
 		}
 	}
 }
+
+/**
+ * free_args - Free up memory taken by args.
+ */
+void free_args(char **args)
+{
+	size_t x;
+
+	x = 0;
+	while (args[x])
+	{
+		free(args[x];
+		x++;
+	}
+	free(args);
+}

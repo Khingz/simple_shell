@@ -39,10 +39,11 @@ int exit_shell(char **argv)
 				return (2);
 		}
 	}
-	argv -= 1;
-	for (i = 0; argv[i]; i++)
-		free(argv[i]);
-	free(argv);
+	else
+	{
+		return (-3);
+	}
+	free_args(argv);
 	free_env();
 	exit(num * sign);
 }

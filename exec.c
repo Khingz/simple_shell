@@ -7,7 +7,7 @@ int exec(char **argv, char *name, int hist)
 	char *cmd;
        
 	cmd = *argv;
-	flag = 0;
+	flag = ex_val = 0;
 	if (*cmd != '.' && *cmd != '/')
 	{
 		flag = 1;
@@ -27,16 +27,21 @@ int exec(char **argv, char *name, int hist)
 		if (!cmd || (access(cmd, F_OK) == -1))
 		{
 			if (errno == EACCES)
-				_exit(create_err(name, hist, argv, 126));
+				ex_val = create_err(name, hist, argv, 126);
 			else
-				_exit(create_err(name, hist, argv, 127));
-			return(create_err(name, hist, argv, 127));
+				ex_val = create_err(name, hist, argv, 127);
+			free_env();
+			free_args(argv);
+			_exit(ex_val);
 		}
 		/*if (access(cmd, X_OK) == -1)
 			return (create_err(name, hist, *arg, 126));*/
 		execve(cmd, argv, NULL);
 		if (errno == EACCES)
-			_exit(create_err(name, hist, argv, 126));
+			ex_val = create_err(name, hist, argv, 126);
+		free_env();
+		free_args(argv);
+		_exit(ex_val);
 	}
 	else
 	{
@@ -87,8 +92,12 @@ int handle_args(char *name, int *hist, exe_ex_val)
 	if (builtin)
 	{
 		ex_val = builtin(args + 1);
-		if (ex_val != -3 && ex_val != 0)
-			create_err(name, *hist, args, ex_val);
+		if (ret != -3)
+		{
+			*exe_ex_val = ex_val;
+			if (ex_val != -3 && ex_val != 0)
+				create_err(name, *hist, args, ex_val);
+		}
 	}
 	else
 	{
@@ -96,11 +105,7 @@ int handle_args(char *name, int *hist, exe_ex_val)
 		ex_val = *exe_ex_val;
 
 	(*hist)++;
-
-	for (idx = 0; args[idx]; idx++)
-		free(args[idx]);
-	free(args);
-
+	free_args(args);
 	return (ex_val);
 }
 
