@@ -26,8 +26,9 @@ int main(int argc, char *argv[])
 		exit(-100);
 	if (argc != 1)
 	{
+		ex_val = exec(argv + 1, name, hist);
 		free_env();
-		return (exec(argv + 1, name, hist));
+		return (ex_val);
 	}
 	if (!isatty(STDIN_FILENO))
 	{
@@ -35,7 +36,10 @@ int main(int argc, char *argv[])
 		{
 			ex_val = handle_args(name, &hist, exe_ex_val);
 			if (ex_val == -2)
+			{
+				free_env();
 				return (0);
+			}
 		}
 		free_env();
 		return (ex_val);
@@ -46,7 +50,7 @@ int main(int argc, char *argv[])
 		ex_val = handle_args(name, &hist, exe_ex_val);
 		if (ex_val == -2 || ex_val == -3)
 		{
-			if (ex_val == -1)
+			if (ex_val == -2)
 				write(STDOUT_FILENO, "\n", 1);
 			free_env();
 			exit(*exe_ex_val);

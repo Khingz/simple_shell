@@ -67,7 +67,7 @@ int handle_args(char *name, int *hist, int *exe_ex_val)
 
 	line_ptr = NULL;
 	idx = 0;
-	read = getline(&line_ptr, &idx, stdin);
+	read =_getline(&line_ptr, &idx, stdin);
 	if (read == -1)
 	{
 		free(line_ptr);
