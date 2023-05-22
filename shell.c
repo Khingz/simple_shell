@@ -10,14 +10,15 @@
 
 int main(int argc, char *argv[])
 {
-	char *prmpt, *name;
-	int ex_val, hist, ex_val_n;
+	char *prmpt;
+	int ex_val, ex_val_n;
 	int *exe_ex_val;
 
 	signal(SIGINT, handle_signal);
 	hist = 1;
 	prmpt = "$ ";
 	name = *argv;
+	aliases = NULL;
 	ex_val = 0;
 	exe_ex_val = &ex_val_n;
 	exe_ex_val = 0;
@@ -26,36 +27,34 @@ int main(int argc, char *argv[])
 		exit(-100);
 	if (argc != 1)
 	{
-		ex_val = exec(argv + 1, name, hist);
+		ex_val = process_file_cmd(argv[1]);
 		free_env();
 		return (ex_val);
 	}
 	if (!isatty(STDIN_FILENO))
 	{
-		while (ex_val == 0)
+		while (ex_val != END_OF_FILE && ex_val == EXIT)
 		{
-			ex_val = handle_args(name, &hist, exe_ex_val);
-			if (ex_val == -2)
-			{
-				free_env();
-				return (0);
-			}
+			ex_val = handle_args(exe_ex_val);
 		}
 		free_env();
-		return (ex_val);
+		free_aliase_list(aliases);
+		return (*exe_ex_val);
 	}
 	while (1)
 	{
 		write(STDOUT_FILENO, prmpt, 2);
-		ex_val = handle_args(name, &hist, exe_ex_val);
-		if (ex_val == -2 || ex_val == -3)
+		ex_val = handle_args(exe_ex_val);
+		if (ex_val == END_OF_FILE || ex_val == EXIT)
 		{
-			if (ex_val == -2)
+			if (ex_val == END_OF_FILE)
 				write(STDOUT_FILENO, "\n", 1);
 			free_env();
+			free_aliase_list(aliases);
 			exit(*exe_ex_val);
 		}
 	}
 	free_env();
+	free_aliase_list(aliases);
 	return (*exe_ex_val);
 }

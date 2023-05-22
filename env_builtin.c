@@ -2,14 +2,8 @@
 
 /**
  * shellby_env - Prints the current environment where each line is a different
- * variable in the format, 'variable'='value'.
- * @args: A double pointer for the args passed to shell.
- *
- * Return: If an error occurs - -1.
- *	   Otherwise - 0.
  */
-//shellvy_env
-int print_env(char **args)
+int print_env(char **args, char __attribute__((__unused__)) **begin)
 {
 	int idx;
 	char nc = '\n';
@@ -34,7 +28,7 @@ int print_env(char **args)
  * Return: If an error occurs - -1.
  *         Otherwise - 0.
  */
-int set_env(char **args)
+int set_env(char **args, char __attribute__((__unused__)) **begin)
 {
 	char **env_var, *new_value;
 	size_t size;
@@ -86,7 +80,7 @@ int set_env(char **args)
  * Return: If an error occurs - -1.
  *         Otherwise - 0.
  */
-int unset_env(char **args)
+int unset_env(char **args, char __attribute__((__unused__)) **begin)
 {
 	char **env_var, **new_environ;
 	size_t size;
@@ -121,4 +115,3 @@ int unset_env(char **args)
 
 	return (0);
 }
-

@@ -1,6 +1,6 @@
 #include "shell.h"
 
-int exec(char **argv, char *name, int hist)
+int exec(char **argv, char **begin)
 {
 	pid_t pid_child;
 	int status, flag, ex_val;
@@ -27,20 +27,20 @@ int exec(char **argv, char *name, int hist)
 		if (!cmd || (access(cmd, F_OK) == -1))
 		{
 			if (errno == EACCES)
-				ex_val = create_err(name, hist, argv, 126);
+				ex_val = create_err(argv, 126);
 			else
-				ex_val = create_err(name, hist, argv, 127);
+				ex_val = create_err(argv, 127);
 			free_env();
-			free_args(argv);
+			free_args(argv, begin);
+			free_aliase_list(aliases);
 			_exit(ex_val);
 		}
-		/*if (access(cmd, X_OK) == -1)
-			return (create_err(name, hist, *arg, 126));*/
 		execve(cmd, argv, NULL);
 		if (errno == EACCES)
-			ex_val = create_err(name, hist, argv, 126);
+			ex_val = create_err(argv, 126);
 		free_env();
-		free_args(argv);
+		free_args(argv, begin);
+		free_aliase_list(aliases);
 		_exit(ex_val);
 	}
 	else
@@ -57,135 +57,150 @@ int exec(char **argv, char *name, int hist)
 /**
  * handle_args - get cmd and calls the execution of a command.
  */
-int handle_args(char *name, int *hist, int *exe_ex_val)
+int handle_args(int *exe_ex_val)
 {
-	int ex_val;
-	size_t idx;
-	ssize_t read;
-	char **args, *line_ptr;
-	int (*builtin)(char **argv);
-
-	line_ptr = NULL;
-	idx = 0;
-	read =_getline(&line_ptr, &idx, stdin);
-	if (read == -1)
-	{
-		free(line_ptr);
-		return (-2);
-	}
-	if (read == 1)
-	{
-		if (isatty(STDIN_FILENO))
-			write(STDOUT_FILENO, "$ ", 2);
-		free(line_ptr);
-		return (handle_args(name, hist, exe_ex_val));
-	}
-	line_ptr[read - 1] = '\0';
-	replace_var(args, exe_ex_val);
-	args = handle_split(line_ptr, " ");
-	free(line_ptr);
-	if (!args)
-		return (0);
-	builtin = _getbuiltin(args[0]);
-	if (builtin)
-	{
-		ex_val = builtin(args + 1);
-		if (ex_val != -3)
-		{
-			*exe_ex_val = ex_val;
-			if (ex_val != -3 && ex_val != 0)
-				create_err(name, *hist, args, ex_val);
-		}
-	}
-	else
-	{
-		*exe_ex_val = exec(args, name, *hist);
-		ex_val = *exe_ex_val;
-	}
-
-	(*hist)++;
-	free_args(args);
-	return (ex_val);
-}
-
-
-/**char **clear_input(char **argv)
-{
-	ssize_t read, n;
+	int ex_val,  idx;
+	char **args, **begin;
 	char *line_ptr;
 
-	read = getline(&line_ptr, &n, stdin);
-	if (read == -1)
-	{
-		free(line_ptr);
-		return (NULL);
-	}
+	line_ptr = NULL;
+	line_ptr = get_args(line_ptr, exe_ex_val);
+	if (!line_ptr)
+		return (END_OF_FILE);
 
-	argv = handle_split(line_ptr, " ");
+	args = handle_split(line_ptr, " ");
 	free(line_ptr);
-	return (argv);
-}
-
-//run_args
-int execute_args(char **argv, char *name, int *hist)
-{
-	int idx, ex_val;
-	int (*builtin)(char **argv);
-
-	argv = _get_args(argv);
-	if (!argv)
+	args = substi_aliases(args);
+	if (!args)
+		return (0);
+	if (check_args(args) != 0)
 	{
-		return (-1);
+		*exe_ex_val = 2;
+		free_args(args, args);
+		return (*exe_ex_val);
 	}
-	builtin = get_builtin(argv[0]);
-	if (builtin)
+	begin = args;
+	for (idx = 0; args[idx]; idx++)
 	{
-		ex_val = builtin(argv);
-		if(ex_val)
-			create_err(name, *hist, argv, ex_val);
+		if (_strncmp(args[idx], ";", 1) == 0)
+		{
+			free(args[idx]);
+			args[idx] = NULL;
+			ex_val = call_args(args, begin, exe_ex_val);
+			args = &args[++idx];
+			idx = 0;
+		}
 	}
-	else
-		ex_val = exec(argv, name, *hist);
-	(*hist)++;
-	for (idx = 0; argv[idx]; idx++)
-		free(argv[idx]);
-	free(argv);
+	ex_val = call_args(args, begin, exe_ex_val);
+
+	free(begin);
 	return (ex_val);
 }
 
-int _get_args(char **argv)
+/**
+ * get_args - Gets a command from standard input.
+ * @line: A buffer to store the command.
+ * @exe_ret: The return value of the last executed command.
+ *
+ * Return: If an error occurs - NULL.
+ *         Otherwise - a pointer to the stored command.
+ */
+char *get_args(char *line, int *exe_ex_val)
 {
-	size_t read, n;
-	char *line_ptr, **args;
-	int idx;
-       
-	n = 0;
-	line_ptr= NULL;
-	read = getline(&line_ptr, &n, stdin);
-	if (read == 1 || read == -1)
-	{
-		free(line_ptr);
-	}
+	size_t i = 0;
+	ssize_t read;
+	char *prmpt = "$ ";
+
+	if (line)
+		free(line);
+
+	read = _getline(&line, &i, STDIN_FILENO);
+	if (read == -1)
+		return (NULL);
 	if (read == 1)
 	{
-		write(STDOUT_FILENO, "$ ", 2);
-		return (_get_args(argv));
-	}
-	if (read == -1)
-	{
-		return (-2);
-	}
-	args = handle_split(line_ptr, " ");
-	if (!args)
-	{
-		perror("Failed to tokenize");
-		return (-1);
+		hist++;
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, prmpt, 2);
+		return (get_args(line, exe_ex_val));
 	}
 
+	line[read - 1] = '\0';
+	replace_var(&line, exe_ex_val);
+	handle_line(&line, read);
+	return (line);
+}
+
+/**
+ * call_args - Partitions operators from commands and calls
+ */
+int call_args(char **args, char **begin, int *exe_ex_val)
+{
+	int idx, ex_val;
+
+	if (!args[0])
+		return (*exe_ex_val);
 	for (idx = 0; args[idx]; idx++)
-		argv[idx] = args[idx];
-	free(line_ptr);
-	free(args);
+	{
+		if (_strncmp(args[idx], "||", 2) == 0)
+		{
+			free(args[idx]);
+			args[idx] = NULL;
+			ex_val = run_args(args, begin, exe_ex_val);
+			if (*exe_ex_val != 0)
+			{
+				args = &args[++idx];
+				idx = 0;
+			}
+			else
+			{
+				for (idx++; args[idx]; idx++)
+					free(args[idx]);
+				return (ex_val);
+			}
+		}
+		else if (_strncmp(args[idx], "&&", 2) == 0)
+		{
+			free(args[idx]);
+			args[idx] = NULL;
+			ex_val = run_args(args, begin, exe_ex_val);
+			if (*exe_ex_val == 0)
+			{
+				args = &args[++idx];
+				idx = 0;
+			}
+			else
+			{
+				for (idx++; args[idx]; idx++)
+					free(args[idx]);
+				return (ex_val);
+			}
+		}
+	}
+
+	ex_val = run_args(args, begin, exe_ex_val);
+	return (ex_val);
+}
+
+/**
+ * check_args - Checks if there are any leading ';', ';;', '&&', or '||'
+ */
+int check_args(char **args)
+{
+	size_t i;
+	char *curr, *next;
+
+	for (i = 0; args[i]; i++)
+	{
+		curr = args[i];
+		if (curr[0] == ';' || curr[0] == '&' || curr[0] == '|')
+		{
+			if (i == 0 || curr[1] == ';')
+				return (create_err(&args[i], 2));
+			next = args[i + 1];
+			if (next && (next[0] == ';' || next[0] == '&' || next[0] == '|'))
+				return (create_err(&args[i + 1], 2));
+		}
+	}
 	return (0);
 }
-*/

@@ -2,9 +2,10 @@
 
 int num_length(int num)
 {
-	int len = 1;
+	int len;
 	unsigned int tmp_num;
 
+	len = 1;
 	if (num < 0)
 	{
 		len++;
@@ -44,10 +45,12 @@ char *_itoa(int num)
 	}
 
 	len--;
-	do {
+	do 
+	{
 		buff[len] = (tmp_num % 10) + '0';
 		tmp_num /= 10;
 		len--;
-	} while(tmp_num > 0);
+	}
+	while(tmp_num > 0);
 	return (buff);
 }

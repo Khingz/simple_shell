@@ -1,6 +1,6 @@
 #include "shell.h"
 
-char *err_126(char *name, int hist, char **argv)
+char *err_126(char **argv)
 {
 	char *err, *str_his;
 	int len;
@@ -30,7 +30,7 @@ char *err_126(char *name, int hist, char **argv)
 	return (err);
 }
 
-char *err_127(char *name, int hist, char **argv)
+char *err_127(char **argv)
 {
 	char *err, *str_his;
 	int len;
@@ -61,7 +61,7 @@ char *err_127(char *name, int hist, char **argv)
 }
 
 
-char *err_exit(char *name, int hist, char **argv)
+char *err_exit(char **argv)
 {
 	char *err, *str_his;
 	int len;
@@ -83,19 +83,16 @@ char *err_exit(char *name, int hist, char **argv)
 	_strcpy(err, name);
 	_strcat(err, ": ");
 	_strcat(err, str_his);
+	_strcat(err, ": exit: Illegal Number: ");
 	_strcat(err, ": ");
-	_strcat(err, *argv);
-	_strcat(err, ": ");
-	_strcat(err, "Illegal Number");
-	_strcat(err, ": ");
-	_strcat(err, argv[1]);
+	_strcat(err, argv[0]);
 	_strcat(err, "\n");
 
 	free(str_his);
 	return (err);
 }
 
-char *err_env(char *name, int hist, char **argv)
+char *err_env(char **argv)
 {
 	char *err, *str_his;
 	int len;
@@ -118,14 +115,13 @@ char *err_env(char *name, int hist, char **argv)
 	_strcat(err, str_his);
 	_strcat(err, ": ");
 	_strcat(err, *argv);
-	_strcat(err, ": ");
 	_strcat(err, "Unable to add/remove from environment\n");
 
 	free(str_his);
 	return (err);
 }
 
-char *err_cd(char *name, int hist, char **argv)
+char *err_cd(char **argv)
 {
 	char *err, *str_his;
 	int len;
@@ -134,7 +130,7 @@ char *err_cd(char *name, int hist, char **argv)
 	if (!str_his)
 		return (NULL);
 
-	len = _strlen(name) + _strlen(str_his) + _strlen(*argv) + _strlen(argv[1]) + 18;
+	len = _strlen(name) + _strlen(str_his) + _strlen(*argv) + _strlen(argv[1]) + 21;
 	err = malloc(sizeof(char) * (len + 1));
 
 	if (!err)
@@ -146,11 +142,9 @@ char *err_cd(char *name, int hist, char **argv)
 	_strcpy(err, name);
 	_strcat(err, ": ");
 	_strcat(err, str_his);
-	_strcat(err, ": ");
+	_strcat(err, ": cd: can't cd to");
 	_strcat(err, *argv);
-	_strcat(err, ": ");
 	_strcat(err, "Can't cd");
-	_strcat(err, argv[1]);
 	_strcat(err, "\n");
 
 	free(str_his);

@@ -49,20 +49,14 @@ char *get_env_val(char *proximal, int len)
 	free(var);
 	if (var_loc)
 	{
-		tmp= *var_loc;
+		tmp = *var_loc;
 		while (*tmp != '=')
 			tmp++;
 		tmp++;
 		sub = malloc(_strlen(tmp) + 1);
 		if (!sub)
-			return (NULL);
-		_strcpy(sub, tmp);
+			_strcpy(sub, tmp);
 	}
-	else
-	{
-		sub = NULL;
-	}
-
 	return (sub);
 }
 
@@ -73,14 +67,15 @@ char *get_env_val(char *proximal, int len)
 void replace_var(char **line, int *exe_ex_val)
 {
 	int len, y, z;
-	char *sub, *line_old, *line_new, *var;
+	char *sub, *line_old, *line_new;
 
 	y = z = 0;
-	sub = var = NULL;
+	sub = line_old = NULL;
 	line_old = *line;
-	for (y = 0; line_old[y]; y++)
+	for (; line_old[y]; y++)
 	{
-		if (line_old[y] == '$' && line_old[y + 1])
+		if (line_old[y] == '$' && line_old[y + 1]
+				&& line_old[y + 1] != ' ')
 		{
 			if (line_old[y + 1] == '$')
 			{
@@ -102,7 +97,7 @@ void replace_var(char **line, int *exe_ex_val)
 				sub = get_env_val(&line_old[y + 1], len);
 			}
 			line_new = malloc(y + _strlen(sub) + _strlen(&line_old[z]) + 1);
-			if (!line_new)
+			if (!line)
 				return;
 			line_new[0] = '\0';
 			_strncat(line_new, line_old, y);
@@ -115,7 +110,7 @@ void replace_var(char **line, int *exe_ex_val)
 			_strcat(line_new, &line_old[z]);
 			free(line_old);
 			*line = line_new;
-			line_new = line_new;
+			line_old = line_new;
 			y = -1;
 		}
 	}
@@ -124,15 +119,11 @@ void replace_var(char **line, int *exe_ex_val)
 /**
  * free_args - Free up memory taken by args.
  */
-void free_args(char **args)
+void free_args(char **argv, char **begin)
 {
-	size_t x;
+	size_t i;
 
-	x = 0;
-	while (args[x])
-	{
-		free(args[x]);
-		x++;
-	}
-	free(args);
+	for (i = 0; argv[i]; i++)
+		free(argv[i]);
+	free(begin);
 }

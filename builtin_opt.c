@@ -1,12 +1,15 @@
 #include "shell.h"
 
-int (*_getbuiltin(char *cmd))(char **argv)
+int (*_getbuiltin(char *cmd))(char **argv, char **begin)
 {
 	builtin_t b_func[] = {
 		{"exit", exit_shell},
 		{ "setenv", set_env },
 		{ "unsetenv", unset_env },
 		{ "cd", ch_cd },
+		{"env", print_env},
+		{"alias", _alias},
+		{"help", builtin_help},
 		{NULL, NULL}
 	};
 	int i;
@@ -19,33 +22,31 @@ int (*_getbuiltin(char *cmd))(char **argv)
 	return (b_func[i].f);
 }
 
-int exit_shell(char **argv)
+int exit_shell(char **argv, char **begin)
 {
-	int i = 0, sign = 1;
-	unsigned int num = 0;
+	int i = 0, int_len = 1;
+	unsigned int num = 0, max = 1 << (sizeof(int) * 8 -1);
 
-	if (argv[1])
+	if (argv[0])
 	{
-		if (argv[0][i] == '-')
-			sign = -1;
 		for (; argv[0][i]; i++)
 		{
-			if (argv[0][i] == '-')
-				sign *= -1;
-
-			if (argv[0][i] >= '0' && argv[0][i] <= '9')
+			if (i <= int_len && argv[0][i] >= '0' && argv[0][i] <= '9')
 				num = (num * 10) + (argv[0][i] - '0');
 			else
-				return (2);
+				return (create_err(--argv, 2));
 		}
 	}
 	else
 	{
 		return (-3);
 	}
-	free_args(argv);
+	if (num > max -1)
+		return (create_err(--argv, 2));
+	argv -= 1;
+	free_args(argv, begin);
 	free_env();
-	exit(num * sign);
+	exit(num);
 }
 
 /**
@@ -56,7 +57,7 @@ int exit_shell(char **argv)
  *         If an error occurs - -1.
  *         Otherwise - 0.
  */
-int ch_cd(char **args)
+int ch_cd(char **args, char __attribute__((__unused__)) **begin)
 {
 	char *old_pwd, *pwd;
 	struct stat dir;
@@ -79,7 +80,7 @@ int ch_cd(char **args)
 			else
 			{
 				free(old_pwd);
-				return (2);
+				return (create_err(args, 2));
 			}
 		}
 	}
@@ -96,16 +97,48 @@ int ch_cd(char **args)
 
 	dir_inf[0] = "OLDPWD";
 	dir_inf[1] = old_pwd;
-	if (set_env(dir_inf) == -1)
+	if (set_env(dir_inf, dir_inf) == -1)
 		return (-1);
 
 	dir_inf[0] = "PWD";
 	dir_inf[1] = pwd;
-	if (set_env(dir_inf) == -1)
+	if (set_env(dir_inf, dir_inf) == -1)
 		return (-1);
 
 	free(old_pwd);
 	free(pwd);
 	free(dir_inf);
+	return (0);
+}
+
+/**
+ * shellby_help - Displays information about shellby builtin commands.
+ * @args: An array of arguments.
+ * @front: A pointer to the beginning of args.
+ *
+ * Return: If an error occurs - -1.
+ *         Otherwise - 0.
+ */
+int builtin_help(char **args, char __attribute__((__unused__)) **front)
+{
+	if (!args[0])
+		help_all();
+	else if (_strcmp(args[0], "alias") == 0)
+		help_alias();
+	else if (_strcmp(args[0], "cd") == 0)
+		help_cd();
+	else if (_strcmp(args[0], "exit") == 0)
+		help_exit();
+	else if (_strcmp(args[0], "env") == 0)
+		help_env();
+	else if (_strcmp(args[0], "setenv") == 0)
+		help_setenv();
+	else if (_strcmp(args[0], "unsetenv") == 0)
+		help_unsetenv();
+	else if (_strcmp(args[0], "help") == 0)
+		help_help();
+	else
+		write(STDERR_FILENO, name, _strlen(name));
+
 	return (0);
 }

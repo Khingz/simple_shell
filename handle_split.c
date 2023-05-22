@@ -18,7 +18,7 @@ char **handle_split(char *line, char *delim)
 	token = _token_num(line, delim);
 	if (token == 0)
 		return (NULL);
-	ptr = malloc(sizeof(char *) * (token + 1));
+	ptr = malloc(sizeof(char *) * (token + 2));
 	if (!ptr)
 	{
 		return (NULL);
@@ -45,6 +45,7 @@ char **handle_split(char *line, char *delim)
 		ptr[x][y] = '\0';
 	}
 	ptr[x] = NULL;
+	ptr[x + 1] = NULL;
 	return (ptr);
 }
 
