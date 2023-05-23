@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		write(STDOUT_FILENO, prmpt, 2);
-		ex_val = handle_args(exe_ex_val);
+		ex_val = _handle_args(exe_ex_val);
 		if (ex_val == END_OF_FILE || ex_val == EXIT)
 		{
 			if (ex_val == END_OF_FILE)

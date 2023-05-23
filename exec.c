@@ -91,7 +91,7 @@ int _handle_args(int *exe_ex_val)
 			idx = 0;
 		}
 	}
-	ex_val = call_args(args, begin, exe_ex_val);
+	ex_val = _call_args(args, begin, exe_ex_val);
 
 	free(begin);
 	return (ex_val);
