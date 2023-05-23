@@ -24,8 +24,8 @@ int (*_getbuiltin(char *cmd))(char **argv, char **begin)
 
 int exit_shell(char **argv, char **begin)
 {
-	int i = 0, int_len = 1;
-	unsigned int num = 0, max = 1 << (sizeof(int) * 8 -1);
+	int i = 0, int_len = 10;
+	unsigned int num = 0, max = 1 << (sizeof(int) * 8 - 1);
 
 	if (argv[0])
 	{
@@ -46,6 +46,7 @@ int exit_shell(char **argv, char **begin)
 	argv -= 1;
 	free_args(argv, begin);
 	free_env();
+	free_aliase_list(aliases);
 	exit(num);
 }
 

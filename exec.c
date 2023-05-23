@@ -6,9 +6,9 @@ int exec(char **argv, char **begin)
 	int status, flag, ex_val;
 	char *cmd;
        
-	cmd = *argv;
+	cmd = argv[0];
 	flag = ex_val = 0;
-	if (*cmd != '.' && *cmd != '/')
+	if (cmd[0] != '.' && cmd[0] != '/')
 	{
 		flag = 1;
 		cmd = get_loc(cmd);
