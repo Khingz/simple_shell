@@ -158,7 +158,7 @@ ssize_t _get_new_len(char *line)
 					len++;
 			}
 			else
-				logical_ops(&line[i], &len);
+				_logical_ops(&line[i], &len);
 		}
 		else if (curr == ';')
 		{
@@ -176,27 +176,27 @@ ssize_t _get_new_len(char *line)
  * @line: A pointer to the character to check in the line.
  * @new_len: Pointer to new_len in get_new_len function.
  */
-void logical_ops(char *line, ssize_t *new_len)
+void _logical_ops(char *line, ssize_t *len)
 {
-	char previous, current, next;
+	char prev, curr, next;
 
-	previous = *(line - 1);
-	current = *line;
+	prev = *(line - 1);
+	curr = *line;
 	next = *(line + 1);
 
-	if (current == '&')
+	if (curr == '&')
 	{
-		if (next == '&' && previous != ' ')
-			(*new_len)++;
-		else if (previous == '&' && next != ' ')
-			(*new_len)++;
+		if (next == '&' && prev != ' ')
+			(*len)++;
+		else if (prev == '&' && next != ' ')
+			(*len)++;
 	}
-	else if (current == '|')
+	else if (curr == '|')
 	{
-		if (next == '|' && previous != ' ')
-			(*new_len)++;
-		else if (previous == '|' && next != ' ')
-			(*new_len)++;
+		if (next == '|' && prev != ' ')
+			(*len)++;
+		else if (prev == '|' && next != ' ')
+			(*len)++;
 	}
 }
 

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	{
 		while (ex_val != END_OF_FILE && ex_val != EXIT)
 		{
-			ex_val = handle_args(exe_ex_val);
+			ex_val = _handle_args(exe_ex_val);
 		}
 		free_env();
 		free_aliase_list(aliases);

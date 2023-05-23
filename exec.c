@@ -57,14 +57,14 @@ int exec(char **argv, char **begin)
 /**
  * handle_args - get cmd and calls the execution of a command.
  */
-int handle_args(int *exe_ex_val)
+int _handle_args(int *exe_ex_val)
 {
 	int ex_val,  idx;
 	char **args, **begin;
 	char *line_ptr;
 
 	line_ptr = NULL;
-	line_ptr = get_args(line_ptr, exe_ex_val);
+	line_ptr = _get_args(line_ptr, exe_ex_val);
 	if (!line_ptr)
 		return (END_OF_FILE);
 
@@ -73,7 +73,7 @@ int handle_args(int *exe_ex_val)
 	args = substi_aliases(args);
 	if (!args)
 		return (0);
-	if (check_args(args) != 0)
+	if (_check_args(args) != 0)
 	{
 		*exe_ex_val = 2;
 		free_args(args, args);
@@ -86,7 +86,7 @@ int handle_args(int *exe_ex_val)
 		{
 			free(args[idx]);
 			args[idx] = NULL;
-			ex_val = call_args(args, begin, exe_ex_val);
+			ex_val = _call_args(args, begin, exe_ex_val);
 			args = &args[++idx];
 			idx = 0;
 		}
@@ -105,7 +105,7 @@ int handle_args(int *exe_ex_val)
  * Return: If an error occurs - NULL.
  *         Otherwise - a pointer to the stored command.
  */
-char *get_args(char *line, int *exe_ex_val)
+char *_get_args(char *line, int *exe_ex_val)
 {
 	size_t i = 0;
 	ssize_t read;
@@ -122,7 +122,7 @@ char *get_args(char *line, int *exe_ex_val)
 		hist++;
 		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, prmpt, 2);
-		return (get_args(line, exe_ex_val));
+		return (_get_args(line, exe_ex_val));
 	}
 
 	line[read - 1] = '\0';
@@ -134,7 +134,7 @@ char *get_args(char *line, int *exe_ex_val)
 /**
  * call_args - Partitions operators from commands and calls
  */
-int call_args(char **args, char **begin, int *exe_ex_val)
+int _call_args(char **args, char **begin, int *exe_ex_val)
 {
 	int idx, ex_val;
 
@@ -185,21 +185,21 @@ int call_args(char **args, char **begin, int *exe_ex_val)
 /**
  * check_args - Checks if there are any leading ';', ';;', '&&', or '||'
  */
-int check_args(char **args)
+int _check_args(char **argv)
 {
 	size_t i;
 	char *curr, *next;
 
-	for (i = 0; args[i]; i++)
+	for (i = 0; argv[i]; i++)
 	{
-		curr = args[i];
+		curr = argv[i];
 		if (curr[0] == ';' || curr[0] == '&' || curr[0] == '|')
 		{
 			if (i == 0 || curr[1] == ';')
-				return (create_err(&args[i], 2));
-			next = args[i + 1];
+				return (create_err(&argv[i], 2));
+			next = argv[i + 1];
 			if (next && (next[0] == ';' || next[0] == '&' || next[0] == '|'))
-				return (create_err(&args[i + 1], 2));
+				return (create_err(&argv[i + 1], 2));
 		}
 	}
 	return (0);
