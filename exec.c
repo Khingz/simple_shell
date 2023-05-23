@@ -127,7 +127,7 @@ char *get_args(char *line, int *exe_ex_val)
 
 	line[read - 1] = '\0';
 	replace_var(&line, exe_ex_val);
-	handle_line(&line, read);
+	_handle_line(&line, read);
 	return (line);
 }
 
@@ -146,7 +146,7 @@ int call_args(char **args, char **begin, int *exe_ex_val)
 		{
 			free(args[idx]);
 			args[idx] = NULL;
-			ex_val = run_args(args, begin, exe_ex_val);
+			ex_val = _run_args(args, begin, exe_ex_val);
 			if (*exe_ex_val != 0)
 			{
 				args = &args[++idx];
@@ -163,7 +163,7 @@ int call_args(char **args, char **begin, int *exe_ex_val)
 		{
 			free(args[idx]);
 			args[idx] = NULL;
-			ex_val = run_args(args, begin, exe_ex_val);
+			ex_val = _run_args(args, begin, exe_ex_val);
 			if (*exe_ex_val == 0)
 			{
 				args = &args[++idx];
@@ -178,7 +178,7 @@ int call_args(char **args, char **begin, int *exe_ex_val)
 		}
 	}
 
-	ex_val = run_args(args, begin, exe_ex_val);
+	ex_val = _run_args(args, begin, exe_ex_val);
 	return (ex_val);
 }
 

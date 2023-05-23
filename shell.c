@@ -11,17 +11,16 @@
 int main(int argc, char *argv[])
 {
 	char *prmpt;
-	int ex_val, ex_val_n;
+	int ex_val = 0, ex_val_n;
 	int *exe_ex_val;
 
 	signal(SIGINT, handle_signal);
+	exe_ex_val = &ex_val_n;
 	hist = 1;
 	prmpt = "$ ";
 	name = *argv;
 	aliases = NULL;
-	ex_val = 0;
-	exe_ex_val = &ex_val_n;
-	exe_ex_val = 0;
+	*exe_ex_val = 0;
 	environ = copy_env();
 	if (!environ)
 		exit(-100);

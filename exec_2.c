@@ -3,144 +3,134 @@
 /**
  * run_args - Calls the execution of a command
  */
-int run_args(char **args, char **begin, int *exe_ex_val)
+int _run_args(char **argv, char **begin, int *exe_ex_val)
 {
 	int ex_val, i;
 	int (*builtin)(char **args, char **begin);
 
-	builtin = _getbuiltin(args[0]);
+	builtin = _getbuiltin(argv[0]);
 	if (builtin)
 	{
-		ex_val = builtin(args + 1, begin);
+		ex_val = builtin(argv + 1, begin);
 		if (ex_val != EXIT)
 			*exe_ex_val = ex_val;
 	}
 	else
 	{
-		*exe_ex_val = exec(args, begin);
+		*exe_ex_val = exec(argv, begin);
 		ex_val = *exe_ex_val;
 	}
 
 	hist++;
 
-	for (i = 0; args[i]; i++)
-		free(args[i]);
+	for (i = 0; argv[i]; i++)
+		free(argv[i]);
 
 	return (ex_val);
 }
 
 /**
  * handle_line - Partitions a line read from standard input as needed.
- * @line: A pointer to a line read from standard input.
- * @read: The length of line.
- *
- * Description: Spaces are inserted to separate ";", "||", and "&&".
- *              Replaces "#" with '\0'.
  */
-void handle_line(char **line, ssize_t read)
+void _handle_line(char **line, ssize_t read)
 {
-	char *old_line, *new_line;
-	char previous, current, next;
+	char *line_old, *line_new;
+	char curr, next, prev;
 	size_t i, j;
-	ssize_t new_len;
+	ssize_t len;
 
-	new_len = get_new_len(*line);
-	if (new_len == read - 1)
+	len = _get_new_len(*line);
+	if (len == read - 1)
 		return;
-	new_line = malloc(new_len + 1);
-	if (!new_line)
+	line_new = malloc(len + 1);
+	if (!line_new)
 		return;
 	j = 0;
-	old_line = *line;
-	for (i = 0; old_line[i]; i++)
+	line_old = *line;
+	for (i = 0; line_old[i]; i++)
 	{
-		current = old_line[i];
-		next = old_line[i + 1];
+		curr = line_old[i];
+		next = line_old[i + 1];
 		if (i != 0)
 		{
-			previous = old_line[i - 1];
-			if (current == ';')
+			prev = line_old[i - 1];
+			if (curr == ';')
 			{
-				if (next == ';' && previous != ' ' && previous != ';')
+				if (next == ';' && prev != ' ' && prev != ';')
 				{
-					new_line[j++] = ' ';
-					new_line[j++] = ';';
+					line_new[j++] = ' ';
+					line_new[j++] = ';';
 					continue;
 				}
-				else if (previous == ';' && next != ' ')
+				else if (prev == ';' && next != ' ')
 				{
-					new_line[j++] = ';';
-					new_line[j++] = ' ';
+					line_new[j++] = ';';
+					line_new[j++] = ' ';
 					continue;
 				}
-				if (previous != ' ')
-					new_line[j++] = ' ';
-				new_line[j++] = ';';
+				if (prev != ' ')
+					line_new[j++] = ' ';
+				line_new[j++] = ';';
 				if (next != ' ')
-					new_line[j++] = ' ';
+					line_new[j++] = ' ';
 				continue;
 			}
-			else if (current == '&')
+			else if (curr == '&')
 			{
-				if (next == '&' && previous != ' ')
-					new_line[j++] = ' ';
-				else if (previous == '&' && next != ' ')
+				if (next == '&' && prev != ' ')
+					line_new[j++] = ' ';
+				else if (prev == '&' && next != ' ')
 				{
-					new_line[j++] = '&';
-					new_line[j++] = ' ';
+					line_new[j++] = '&';
+					line_new[j++] = ' ';
 					continue;
 				}
 			}
-			else if (current == '|')
+			else if (curr == '|')
 			{
-				if (next == '|' && previous != ' ')
-					new_line[j++]  = ' ';
-				else if (previous == '|' && next != ' ')
+				if (next == '|' && prev != ' ')
+					line_new[j++] = ' ';
+				else if (prev == '|' && next != ' ')
 				{
-					new_line[j++] = '|';
-					new_line[j++] = ' ';
+					line_new[j++] = '|';
+					line_new[j++] = ' ';
 					continue;
 				}
 			}
 		}
-		else if (current == ';')
+		else if (curr == ';')
 		{
-			if (i != 0 && old_line[i - 1] != ' ')
-				new_line[j++] = ' ';
-			new_line[j++] = ';';
+			if (i != 0 && line_new[i - 1] != ' ')
+				line_new[j++] = ' ';
+			line_new[j++] = ';';
 			if (next != ' ')
-				new_line[j++] = ' ';
+				line_new[j++] = ' ';
 			continue;
 		}
-		new_line[j++] = old_line[i];
+		line_new[j++] = line_old[i];
 	}
-	new_line[j] = '\0';
+	line_new[j] = '\0';
 
 	free(*line);
-	*line = new_line;
+	*line = line_new;
 }
 
 /**
  * get_new_len - Gets the new length of a line partitioned
- *               by ";", "||", "&&&", or "#".
- * @line: The line to check.
- *
- * Return: The new length of the line.
- *
- * Description: Cuts short lines containing '#' comments with '\0'.
+ *               by ";", "||", "&&&", or "#"
  */
 
-ssize_t get_new_len(char *line)
+ssize_t _get_new_len(char *line)
 {
 	size_t i;
-	ssize_t new_len = 0;
-	char current, next;
+	ssize_t len = 0;
+	char curr, next;
 
 	for (i = 0; line[i]; i++)
 	{
-		current = line[i];
+		curr = line[i];
 		next = line[i + 1];
-		if (current == '#')
+		if (curr == '#')
 		{
 			if (i == 0 || line[i - 1] == ' ')
 			{
@@ -150,36 +140,36 @@ ssize_t get_new_len(char *line)
 		}
 		else if (i != 0)
 		{
-			if (current == ';')
+			if (curr == ';')
 			{
 				if (next == ';' && line[i - 1] != ' ' && line[i - 1] != ';')
 				{
-					new_len += 2;
+					len += 2;
 					continue;
 				}
 				else if (line[i - 1] == ';' && next != ' ')
 				{
-					new_len += 2;
+					len += 2;
 					continue;
 				}
 				if (line[i - 1] != ' ')
-					new_len++;
+					len++;
 				if (next != ' ')
-					new_len++;
+					len++;
 			}
 			else
-				logical_ops(&line[i], &new_len);
+				logical_ops(&line[i], &len);
 		}
-		else if (current == ';')
+		else if (curr == ';')
 		{
 			if (i != 0 && line[i - 1] != ' ')
-				new_len++;
+				len++;
 			if (next != ' ')
-				new_len++;
+				len++;
 		}
-		new_len++;
+		len++;
 	}
-	return (new_len);
+	return (len);
 }
 /**
  * logical_ops - Checks a line for logical operators "||" or "&&".
