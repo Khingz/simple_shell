@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	}
 	if (!isatty(STDIN_FILENO))
 	{
-		while (ex_val != END_OF_FILE && ex_val == EXIT)
+		while (ex_val != END_OF_FILE && ex_val != EXIT)
 		{
 			ex_val = handle_args(exe_ex_val);
 		}
