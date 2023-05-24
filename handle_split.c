@@ -4,10 +4,10 @@ int _token_len(char *str, char *delim);
 int _token_num(char *s, char *delim);
 
 /**
- * handle_split - adds token a string.
- * @line: the string.
- * @delim: delimiter character that adds token to the string.
- * Return: A pointer to an array.
+ * handle_split - func that adds token a string.
+ * @line: a point and also the string.
+ * @delim: pointer that adds token to the string.
+ * Return: returns pointer to the string or NULL.
  */
 char **handle_split(char *line, char *delim)
 {
