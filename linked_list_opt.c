@@ -62,7 +62,7 @@ node_t *get_dir(char *path)
 			free_list(head);
 			free(dirs);
 			return (NULL);
-		}	
+		}
 	}
 	free(dirs);
 	return (head);
