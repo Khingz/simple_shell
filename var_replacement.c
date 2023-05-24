@@ -64,9 +64,11 @@ char *_get_env_val(char *proximal, int len)
 }
 
 /**
- * variable_replacement - Replaces $$ with current PID, $? with the return
- * /exit value of the last program exeucted. Environment variables names
- */
+ * _replace_var- func replaces $$ with current PID.
+ * @line: a pointer.
+ * @exe_ex_val: pointer to a list.
+ * Return: retunrs NULL on failure.
+ **/
 void _replace_var(char **line, int *exe_ex_val)
 {
 	int len, y, z;
