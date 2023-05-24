@@ -50,9 +50,12 @@ char **handle_split(char *line, char *delim)
 }
 
 /**
- * token_len - Locates the delimiter index marking the end
+ * _token_len - func locates the delimiter index marking the end
  *             of the first token contained within a string.
- */
+ * @s: pointer to the head of the list.
+ * @delim: pointer to the s string
+ * Return: return value is NULL
+ **/
 int _token_len(char *s, char *delim)
 {
 	int idx, len;
