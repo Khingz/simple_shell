@@ -9,12 +9,13 @@ char *get_loc(char *cmd)
 {
 	node_t *head, *_dirs;
 	struct stat st;
-	char *tmp, *path;
+	char **path;
+	char *tmp;
 
-	path = get_env("PATH");
-	if (!path)
+	path = _get_env("PATH");
+	if (!path || !(*path))
 		return (NULL);
-	_dirs = get_dir(path + 5);
+	_dirs = get_dir(*path + 5);
 	head = _dirs;
 	while (_dirs)
 	{

@@ -1,34 +1,35 @@
 #include "shell.h"
 
-int create_err(char *name, int hist, char *cmd, int error)
+int create_err(char **argv, int error)
 {
-	char *_err, *str_hist;
-	int len;
+	char *_err;
 
-	str_hist = _itoa(hist);
-	if (!str_hist)
-		return (error);
-
-	len = _strlen(name) + _strlen(str_hist) + _strlen(cmd) + 6;
-	if (error == 127)
-		len += 10;
-	else
-		len += 18;
-	_err = malloc(sizeof(char) * (len + 1));
-	if (!_err)
-		return (error);
-
-	_strcpy(_err, name);
-	_strcat(_err, ": ");
-	_strcat(_err, str_hist);
-	_strcat(_err, ": ");
-	_strcat(_err, cmd);
-	if (error == 127)
-		_strcat(_err, ": not found\n");
-	else
+	switch (error)
 	{
-		_strcat(_err, ": Permission denied\n");
+		case -1:
+			_err = err_env(argv);
+			break;
+		case 1:
+			_err = err_env(argv);
+			break;
+		case 2:
+			if (*(argv[0]) == 'e')
+				_err = err_exit(++argv);
+			else if (argv[0][0] == ';' || argv[0][0] == '&' || argv[0][0] == '|')
+				_err = err_syntax(argv);
+			else
+				_err = err_cd(argv);
+			break;
+		case 126:
+			_err = err_126(argv);
+			break;
+		case 127:
+			_err = err_127(argv);
+			break;
 	}
-	write(STDERR_FILENO, _err, len);
+	write(STDERR_FILENO, _err, _strlen(_err));
+
+	if (_err)
+		free(_err);
 	return (error);
 }
