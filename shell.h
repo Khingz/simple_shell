@@ -18,9 +18,9 @@ extern char **environ;
 /** STRUCTURES */
 
 /**
- * struct node -  new struct type that defines a linked list.
- * @dir: directory path.
- * @next: pointer to another struct list_s.
+ * struct node - struct type that defines a linked list.
+ * @dir: directory path of a linked list.
+ * @next: pointer to the head of the struct list_s.
  */
 typedef struct node {
 	struct node *next;
@@ -28,9 +28,9 @@ typedef struct node {
 } node_t;
 
 /**
- * struct builtin_s - A structure type defining all builtin commands.
- * @name: The name of the builtin command.
- * @f: A function pointer to the command's function.
+ * struct builtin_s - structure type defines all builtin commands.
+ * @name: name of the builtin command.
+ * @f: funct pointing to the command's function.
  */
 typedef struct builtin_s
 {
@@ -39,10 +39,10 @@ typedef struct builtin_s
 } builtin_t;
 
 /**
- * struct alias_s - A new struct defining aliases.
- * @name: The name of the alias.
-* @value: The value of the alias.
- * @next: A pointer to another struct alias_s.
+ * struct alias_s -  new struct that defines aliases.
+ * @name: name assigned to the alias.
+* @value: value assigned to the alias.
+ * @next: pointer to  struct alias_s.
  */
 typedef struct alias_s
 {
