@@ -1,10 +1,10 @@
 ii#include "shell.h"
 
 /**
- * add_node_end - adds a new node to the end of a  linked list.
+ * add_node_end - func that adds a new node to the end of a linked list.
  * @head: pointer to the head of the node_t
  * @dir: directory path for the new node to contain.
- * Return: pointer to the new node or NULL.
+ * Return: returns pointer to the new node or NULL.
  */
 node_t *add_node_end(node_t **head, char *dir)
 {
@@ -34,9 +34,9 @@ node_t *add_node_end(node_t **head, char *dir)
 }
 
 /**
- * get_dir - takes token to a colon-separated list of dir into a linked list.
- * @path: colon-separated list of dir.
- * Return: pointer to the initial linked list.
+ * get_dir - func of token to a colon-separated list of dir into a linked list.
+ * @path: points to colon-separated list of dir.
+ * Return: returns pointer to the initial linked list.
  */
 node_t *get_dir(char *path)
 {
