@@ -1,4 +1,4 @@
-ii#include "shell.h"
+#include "shell.h"
 
 /**
  * add_node_end - func that adds a new node to the end of a linked list.
@@ -70,8 +70,9 @@ node_t *get_dir(char *path)
 
 /**
  * free_list - func that frees a linked list.
- * @head: pointer to  head of node_t.
- */
+ * @head: points to  head of node_t.
+ * Return: no return value.
+ **/
 void free_list(node_t *head)
 {
 	node_t *next;
@@ -86,9 +87,11 @@ void free_list(node_t *head)
 }
 
 /**
- * populate_path_dir - Copies path but also replaces leading/sandwiched/trailing
- *		   colons (:) with current working directory
- */
+ * populate_path_dir - func that moves path and replaces leading/sandwiched/
+ * trailing colons (:) with CWD
+ * path: pointer
+ * Return: no return value
+ **/
 char *populate_path_dir(char *path)
 {
 	int i, len;
