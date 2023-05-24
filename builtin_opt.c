@@ -54,7 +54,7 @@ int exit_shell(char **argv, char **begin)
 	{
 		return (-3);
 	}
-	if (num > max -1)
+	if (num > max - 1)
 		return (create_err(--argv, 2));
 	argv -= 1;
 	free_args(argv, begin);
@@ -66,7 +66,7 @@ int exit_shell(char **argv, char **begin)
 /**
  * ch_cd - func that changes the current directory of the shellby process.
  * @args: array of the arguments.
- * @begin: a pointer 
+ * @begin: a pointer.
  * Return: If the given string is not a directory - 2 or -1 or 0.
  **/
 int ch_cd(char **args, char __attribute__((__unused__)) **begin)
