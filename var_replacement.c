@@ -101,7 +101,7 @@ void _replace_var(char **line, int *exe_ex_val)
 				len = z - (y + 1);
 				sub = _get_env_val(&line_old[y + 1], len);
 			}
-			line_new = malloc(y + _strlen(sub) + _strlen(&line_old[z]) + 1);
+	line_new = malloc(y + _strlen(sub) + _strlen(&line_old[z]) + 1);
 			if (!line)
 				return;
 			line_new[0] = '\0';
@@ -122,7 +122,10 @@ void _replace_var(char **line, int *exe_ex_val)
 }
 
 /**
- * free_args - Free up memory taken by args.
+ * free_args - func that frees up memory space.
+ * @argv: pointer to a list.
+ * @begin: pointer to a list.
+ * Return: returns NULL on failure.
  */
 void free_args(char **argv, char **begin)
 {
