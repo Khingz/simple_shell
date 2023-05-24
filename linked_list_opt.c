@@ -96,7 +96,6 @@ char *populate_path_dir(char *path)
 {
 	int i, len;
 	char *tmp_path, *pwd;
-
 	len = 0;
 	pwd = *(_get_env("PWD")) + 4;
 	for (i = 0; path[i]; i++)
