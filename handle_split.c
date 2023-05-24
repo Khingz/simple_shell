@@ -71,8 +71,10 @@ int _token_len(char *s, char *delim)
 }
 
 /**
- * count_tokens - Counts the number of delimited
- *                words contained within a string.
+ * _token_num - func that Counts number of delimited words in a string.
+ * @s: pointer to head of the list.
+ * @delim: pointer to string
+ * Return: return NULL if the test is not passed.
  */
 int _token_num(char *s, char *delim)
 {
