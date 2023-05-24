@@ -32,7 +32,6 @@ node_t *add_node_end(node_t **head, char *dir)
 
 	return (new_node);
 }
-
 /**
  * get_dir - func of token to a colon-separated list of dir into a linked list.
  * @path: points to colon-separated list of dir.
@@ -67,7 +66,6 @@ node_t *get_dir(char *path)
 	free(dirs);
 	return (head);
 }
-
 /**
  * free_list - func that frees a linked list.
  * @head: points to  head of node_t.
@@ -85,7 +83,6 @@ void free_list(node_t *head)
 		head = next;
 	}
 }
-
 /**
  * populate_path_dir - func that moves path and replaces leading/sandwiched/
  * trailing colons (:) with CWD
@@ -96,6 +93,7 @@ char *populate_path_dir(char *path)
 {
 	int i, len;
 	char *tmp_path, *pwd;
+
 	len = 0;
 	pwd = *(_get_env("PWD")) + 4;
 	for (i = 0; path[i]; i++)
