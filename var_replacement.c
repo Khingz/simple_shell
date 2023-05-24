@@ -1,7 +1,8 @@
 #include "shell.h"
 
 /**
- * get_pid - Gets the current process ID.
+ * _get_current_pid - func that gets the current process ID.
+ * Return: no return value.
  */
 char *_get_current_pid(void)
 {
