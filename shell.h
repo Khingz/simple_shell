@@ -41,7 +41,7 @@ typedef struct builtin_s
 /**
  * struct alias_s - A new struct defining aliases.
  * @name: The name of the alias.
- * @value: The value of the alias.
+* @value: The value of the alias.
  * @next: A pointer to another struct alias_s.
  */
 typedef struct alias_s

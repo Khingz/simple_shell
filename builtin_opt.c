@@ -1,5 +1,12 @@
 #include "shell.h"
 
+/**
+  * _getbuiltin: a func
+  * @cmd: as string
+  * @argv: a pointer
+  * @begin: a pointer
+  * Return: NULL
+**/
 int (*_getbuiltin(char *cmd))(char **argv, char **begin)
 {
 	builtin_t b_func[] = {
@@ -22,6 +29,12 @@ int (*_getbuiltin(char *cmd))(char **argv, char **begin)
 	return (b_func[i].f);
 }
 
+/**
+  * exist_shell- func description
+  * @argv: a string
+  * @begin: a pointer
+  * Return: NULL
+**/
 int exit_shell(char **argv, char **begin)
 {
 	int i = 0, int_len = 10;
@@ -31,7 +44,7 @@ int exit_shell(char **argv, char **begin)
 	{
 		for (; argv[0][i]; i++)
 		{
-			if (i <= int_len && argv[0][i] >= '0' && argv[0][i] <= '9')
+		if (i <= int_len && argv[0][i] >= '0' && argv[0][i] <= '9')
 				num = (num * 10) + (argv[0][i] - '0');
 			else
 				return (create_err(--argv, 2));
