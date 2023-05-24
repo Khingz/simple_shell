@@ -3,7 +3,7 @@
 /**
  * get_loc - func that locates a command in the PATH.
  * @cmd: command to locate in the PATH.
- * Return: name of PATH or NULL.
+ * Return: returns name of PATH or NULL.
  */
 char *get_loc(char *cmd)
 {
