@@ -33,9 +33,11 @@ char *_get_current_pid(void)
 }
 
 /**
- * get_env_value - Gets the value corresponding to the environment variable.
- * @var: The environment variable to search for.
- */
+ * _get_env_val - func that gets the value corresponding to the env variable.
+ * @len: The environment variable to search for.
+ * @proximal: pointer to a list.
+ * Return: returns NULL on failure.
+ **/
 char *_get_env_val(char *proximal, int len)
 {
 	char *sub, *tmp, *var;
