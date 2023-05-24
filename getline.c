@@ -3,13 +3,13 @@
 /**
  * _realloc - Reallocates a memory block using malloc
  */
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+void *_realloc(void *ptr, unsigned int prev_size, unsigned int new_size)
 {
 	char *tmp_ptr, *filler;
 	unsigned int idx;
 	void *memory;
 
-	if (new_size == old_size)
+	if (new_size == prev_size)
 		return (ptr);
 
 	if (ptr == NULL)
@@ -37,7 +37,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 
 	filler = memory;
 
-	for (idx = 0; idx < old_size && idx < new_size; idx++)
+	for (idx = 0; idx < prev_size && idx < new_size; idx++)
 		filler[idx] = *tmp_ptr++;
 
 	free(ptr);
@@ -47,15 +47,15 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 /**
  * assign_lineptr - Reassigns the lineptr variable for _getline.
  */
-void reassign_lineptr(char **lineptr, size_t *n, char *buff, size_t x)
+void reassign_lineptr(char **line_ptr, size_t *n, char *buff, size_t x)
 {
-	if (*lineptr == NULL)
+	if (*line_ptr == NULL)
 	{
 		if (x > 120)
 			*n = x;
 		else
 			*n = 120;
-		*lineptr = buff;
+		*line_ptr = buff;
 	}
 	else if (*n < x)
 	{
@@ -63,12 +63,12 @@ void reassign_lineptr(char **lineptr, size_t *n, char *buff, size_t x)
 			*n = x;
 		else
 			*n = 120;
-		free(*lineptr);
-		*lineptr = buff;
+		free(*line_ptr);
+		*line_ptr = buff;
 	}
 	else
 	{
-		_strcpy(*lineptr, buff);
+		_strcpy(*line_ptr, buff);
 		free(buff);
 	}
 }
@@ -76,49 +76,51 @@ void reassign_lineptr(char **lineptr, size_t *n, char *buff, size_t x)
 /**
  * _getline - Reads input from a stream.
  */
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
+ssize_t _getline(char **line_ptr, size_t *n, FILE *stream)
 {
 	static ssize_t input;
-	ssize_t ret;
-	char c = 'x', *buffer;
-	int r;
+	ssize_t ex_val;
+	char ch;
+	char *buff;
+	int b_read;
 
+	ch = 'x';
 	if (input == 0)
 		fflush(stream);
 	else
 		return (-1);
 	input = 0;
 
-	buffer = malloc(sizeof(char) * 120);
-	if (!buffer)
+	buff = malloc(sizeof(char) * 120);
+	if (!buff)
 		return (-1);
 
-	while (c != '\n')
+	while (ch != '\n')
 	{
-		r = read(STDIN_FILENO, &c, 1);
-		if (r == -1 || (r == 0 && input == 0))
+		b_read = read(STDIN_FILENO, &ch, 1);
+		if (b_read == -1 || (b_read == 0 && input == 0))
 		{
-			free(buffer);
+			free(buff);
 			return (-1);
 		}
-		if (r == 0 && input != 0)
+		if (b_read == 0 && input != 0)
 		{
 			input++;
 			break;
 		}
 
 		if (input >= 120)
-			buffer = _realloc(buffer, input, input + 1);
+			buff = _realloc(buff, input, input + 1);
 
-		buffer[input] = c;
+		buff[input] = ch;
 		input++;
 	}
-	buffer[input] = '\0';
+	buff[input] = '\0';
 
-	reassign_lineptr(lineptr, n, buffer, input);
+	reassign_lineptr(line_ptr, n, buff, input);
 
-	ret = input;
-	if (r != 0)
+	ex_val = input;
+	if (b_read != 0)
 		input = 0;
-	return (ret);
+	return (ex_val);
 }

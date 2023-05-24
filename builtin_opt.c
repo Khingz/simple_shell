@@ -9,7 +9,7 @@ int (*_getbuiltin(char *cmd))(char **argv, char **begin)
 		{ "cd", ch_cd },
 		{"env", print_env},
 		{"alias", _alias},
-		{"help", builtin_help},
+		{"help", _help_builtin},
 		{NULL, NULL}
 	};
 	int i;
@@ -72,7 +72,7 @@ int ch_cd(char **args, char __attribute__((__unused__)) **begin)
 	if (args[0])
 	{
 		if (*(args[0]) == '-')
-			chdir(*(get_env("OLDPWD")) + 7);
+			chdir(*(_get_env("OLDPWD")) + 7);
 		else
 		{
 			if (stat(args[0], &dir) == 0 && S_ISDIR(dir.st_mode)
@@ -86,7 +86,7 @@ int ch_cd(char **args, char __attribute__((__unused__)) **begin)
 		}
 	}
 	else
-		chdir(*(get_env("HOME")) + 5);
+		chdir(*(_get_env("HOME")) + 5);
 
 	pwd = getcwd(pwd, 0);
 	if (!pwd)
@@ -120,23 +120,23 @@ int ch_cd(char **args, char __attribute__((__unused__)) **begin)
  * Return: If an error occurs - -1.
  *         Otherwise - 0.
  */
-int builtin_help(char **args, char __attribute__((__unused__)) **front)
+int _help_builtin(char **argv, char __attribute__((__unused__)) **begin)
 {
-	if (!args[0])
-		help_all();
-	else if (_strcmp(args[0], "alias") == 0)
-		help_alias();
-	else if (_strcmp(args[0], "cd") == 0)
-		help_cd();
-	else if (_strcmp(args[0], "exit") == 0)
-		help_exit();
-	else if (_strcmp(args[0], "env") == 0)
-		help_env();
-	else if (_strcmp(args[0], "setenv") == 0)
-		help_setenv();
-	else if (_strcmp(args[0], "unsetenv") == 0)
-		help_unsetenv();
-	else if (_strcmp(args[0], "help") == 0)
+	if (!argv[0])
+		general_help();
+	else if (_strcmp(argv[0], "alias") == 0)
+		aliase_help();
+	else if (_strcmp(argv[0], "cd") == 0)
+		cd_help();
+	else if (_strcmp(argv[0], "exit") == 0)
+		exit_help();
+	else if (_strcmp(argv[0], "env") == 0)
+		env_help();
+	else if (_strcmp(argv[0], "setenv") == 0)
+		set_env_help();
+	else if (_strcmp(argv[0], "unsetenv") == 0)
+		unset_env_help();
+	else if (_strcmp(argv[0], "help") == 0)
 		help_help();
 	else
 		write(STDERR_FILENO, name, _strlen(name));

@@ -5,7 +5,7 @@
  * @name: name of the env variable to get.
  * Return: pointer to env or NULL.
  */
-char **get_env(const char *name)
+char **_get_env(const char *name)
 {
 	int len, idx;
 
@@ -22,7 +22,7 @@ char **get_env(const char *name)
  * copy_env - make a copy of the env.
  * Return: ponter ro copied or NULL
  */
-char **copy_env(void)
+char **_copy_env(void)
 {
 	char **new_env;
 	size_t size;

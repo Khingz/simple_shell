@@ -3,7 +3,7 @@
 /**
  * replace_aliases -
  */
-char **substi_aliases(char **argv)
+char **_substi_aliases(char **argv)
 {
 	alias_t *tmp;
 	int i;
@@ -51,7 +51,7 @@ int _alias(char **argv, char __attribute__((__unused__)) **head)
 	{
 		while (tmp)
 		{
-			print_aliase(tmp);
+			_print_aliase(tmp);
 			tmp = tmp->next;
 		}
 		return (ex_val);
@@ -66,7 +66,7 @@ int _alias(char **argv, char __attribute__((__unused__)) **head)
 			{
 				if (_strcmp(argv[i], tmp->name) == 0)
 				{
-					print_aliase(tmp);
+					_print_aliase(tmp);
 					break;
 				}
 				tmp = tmp->next;
@@ -75,7 +75,7 @@ int _alias(char **argv, char __attribute__((__unused__)) **head)
 				ex_val = create_err(argv + i, 1);
 		}
 		else
-			set_aliase(argv[i], val);
+			_set_aliase(argv[i], val);
 	}
 	return (ex_val);
 }
@@ -83,7 +83,7 @@ int _alias(char **argv, char __attribute__((__unused__)) **head)
 /**
  * set_alias - Will either set an existing alias 'name' with a new value,
  */
-void set_aliase(char *name, char *val)
+void _set_aliase(char *name, char *val)
 {
 	alias_t *tmp;
 	int len, j, k;
@@ -119,7 +119,7 @@ void set_aliase(char *name, char *val)
 /**
  * print_alias - Prints the alias in the format name='value'.
  */
-void print_aliase(alias_t *alias)
+void _print_aliase(alias_t *alias)
 {
 	char *aliase_str;
 	int len;

@@ -3,7 +3,7 @@
 /**
  * get_pid - Gets the current process ID.
  */
-char *get_current_pid(void)
+char *_get_current_pid(void)
 {
 	size_t x;
 	char *buff;
@@ -35,7 +35,7 @@ char *get_current_pid(void)
  * get_env_value - Gets the value corresponding to the environment variable.
  * @var: The environment variable to search for.
  */
-char *get_env_val(char *proximal, int len)
+char *_get_env_val(char *proximal, int len)
 {
 	char *sub, *tmp, *var;
 	char **var_loc;
@@ -45,7 +45,7 @@ char *get_env_val(char *proximal, int len)
 		return (NULL);
 	var[0] = '\0';
 	_strncat(var, proximal, len);
-	var_loc = get_env(var);
+	var_loc = _get_env(var);
 	free(var);
 	if (var_loc)
 	{
@@ -64,7 +64,7 @@ char *get_env_val(char *proximal, int len)
  * variable_replacement - Replaces $$ with current PID, $? with the return
  * /exit value of the last program exeucted. Environment variables names
  */
-void replace_var(char **line, int *exe_ex_val)
+void _replace_var(char **line, int *exe_ex_val)
 {
 	int len, y, z;
 	char *sub, *line_old, *line_new;
@@ -79,7 +79,7 @@ void replace_var(char **line, int *exe_ex_val)
 		{
 			if (line_old[y + 1] == '$')
 			{
-				sub = get_current_pid();
+				sub = _get_current_pid();
 				z = y + 2;
 			}
 			else if (line_old[y + 1] == '?')
@@ -94,7 +94,7 @@ void replace_var(char **line, int *exe_ex_val)
 						line_old[z] != ' '; z++)
 					;
 				len = z - (y + 1);
-				sub = get_env_val(&line_old[y + 1], len);
+				sub = _get_env_val(&line_old[y + 1], len);
 			}
 			line_new = malloc(y + _strlen(sub) + _strlen(&line_old[z]) + 1);
 			if (!line)

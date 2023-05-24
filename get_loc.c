@@ -12,7 +12,7 @@ char *get_loc(char *cmd)
 	char **path;
 	char *tmp;
 
-	path = get_env("PATH");
+	path = _get_env("PATH");
 	if (!path || !(*path))
 		return (NULL);
 	_dirs = get_dir(*path + 5);

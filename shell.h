@@ -74,10 +74,10 @@ void _handle_line(char **line, ssize_t read);
 ssize_t _get_new_len(char *line);
 void _logical_ops(char *line, ssize_t *len);
 void handle_signal(int signal);
-char **copy_env(void);
+char **_copy_env(void);
 void free_env(void);
 char *populate_path_dir(char *path);
-char **get_env(const char *name);
+char **_get_env(const char *name);
 int set_env(char **args, char __attribute__((__unused__)) **begin);
 int unset_env(char **args, char __attribute__((__unused__)) **begin);
 int ch_cd(char **args, char __attribute__((__unused__)) **begin);
@@ -103,19 +103,18 @@ char *_itoa(int num);
 char *err_exit(char **argv);
 char *err_126(char **argv);
 char *err_127(char **argv);
-char *err_cd(char **args);
-char *err_env(char **args);
-char *err_syntax(char **args);
-char *error_1(char **args);
+char *err_cd(char **argv);
+char *err_env(char **argv);
+char *err_syntax(char **argv);
 
 /* Builtin */
 int exit_shell(char **argv, char **begin);
 int (*_getbuiltin(char *cmd))(char **argv, char **begin);
 
 /* Var replacement */
-char *get_env_val(char *proximal, int len);
-void replace_var(char **line, int *exe_ex_val);
-char *get_current_pid(void);
+char *_get_env_val(char *proximal, int len);
+void _replace_var(char **line, int *exe_ex_val);
+char *_get_current_pid(void);
 void free_args(char **args, char **begin);
 
 /* get line */
@@ -124,23 +123,23 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 void reassign_lineptr(char **lineptr, size_t *n, char *buff, size_t x);
 
 /* aliase  */
-char **substi_aliases(char **argv);
+char **_substi_aliases(char **argv);
 int _alias(char **argv, char __attribute__((__unused__)) **head);
-void print_aliase(alias_t *alias);
-void set_aliase(char *name, char *val);
+void _print_aliase(alias_t *alias);
+void _set_aliase(char *name, char *val);
 alias_t *add_aliase_end(alias_t **head, char *name, char *val);
-int builtin_help(char **args, char __attribute__((__unused__)) **front);
+int _help_builtin(char **argv, char __attribute__((__unused__)) **begin);
 void free_aliase_list(alias_t *head);
 
 /* help */
-void help_all(void);
-void help_alias(void);
-void help_cd(void);
-void help_exit(void);
+void general_help(void);
+void aliase_help(void);
+void cd_help(void);
+void exit_help(void);
 void help_help(void);
-void help_env(void);
-void help_setenv(void);
-void help_unsetenv(void);
-void help_history(void);
+void env_help(void);
+void set_env_help(void);
+void unset_env_help(void);
+/*void hist_help(void);*/
 
 #endif

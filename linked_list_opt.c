@@ -95,7 +95,7 @@ char *populate_path_dir(char *path)
 	char *tmp_path, *pwd;
 
 	len = 0;
-	pwd = *(get_env("PWD")) + 4;
+	pwd = *(_get_env("PWD")) + 4;
 	for (i = 0; path[i]; i++)
 	{
 		if (path[i] == ':')

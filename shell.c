@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	name = *argv;
 	aliases = NULL;
 	*exe_ex_val = 0;
-	environ = copy_env();
+	environ = _copy_env();
 	if (!environ)
 		exit(-100);
 	if (argc != 1)

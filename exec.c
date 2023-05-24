@@ -70,7 +70,7 @@ int _handle_args(int *exe_ex_val)
 
 	args = handle_split(line_ptr, " ");
 	free(line_ptr);
-	args = substi_aliases(args);
+	args = _substi_aliases(args);
 	if (!args)
 		return (0);
 	if (_check_args(args) != 0)
@@ -126,7 +126,7 @@ char *_get_args(char *line, int *exe_ex_val)
 	}
 
 	line[read - 1] = '\0';
-	replace_var(&line, exe_ex_val);
+	_replace_var(&line, exe_ex_val);
 	_handle_line(&line, read);
 	return (line);
 }
