@@ -1,13 +1,11 @@
 #include "shell.h"
 
-
 /**
  * main - program that run a simple UNIX command for an interpreter.
  * @argc: arguement count.
  * @argv: arguement vector.
  * Return: 0.
  */
-
 int main(int argc, char *argv[])
 {
 	char *prmpt;
@@ -33,9 +31,7 @@ int main(int argc, char *argv[])
 	if (!isatty(STDIN_FILENO))
 	{
 		while (ex_val != END_OF_FILE && ex_val != EXIT)
-		{
 			ex_val = _handle_args(exe_ex_val);
-		}
 		free_env();
 		free_aliase_list(aliases);
 		return (*exe_ex_val);
