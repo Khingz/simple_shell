@@ -64,13 +64,11 @@ int exit_shell(char **argv, char **begin)
 }
 
 /**
- * shellby_cd - Changes the current directory of the shellby process.
- * @args: An array of arguments.
- *
- * Return: If the given string is not a directory - 2.
- *         If an error occurs - -1.
- *         Otherwise - 0.
- */
+ * ch_cd - func that changes the current directory of the shellby process.
+ * @args: array of the arguments.
+ * @begin: a pointer 
+ * Return: If the given string is not a directory - 2 or -1 or 0.
+ **/
 int ch_cd(char **args, char __attribute__((__unused__)) **begin)
 {
 	char *old_pwd, *pwd;
@@ -126,12 +124,10 @@ int ch_cd(char **args, char __attribute__((__unused__)) **begin)
 }
 
 /**
- * shellby_help - Displays information about shellby builtin commands.
- * @args: An array of arguments.
- * @front: A pointer to the beginning of args.
- *
- * Return: If an error occurs - -1.
- *         Otherwise - 0.
+ * _help_builtin - func that displays information about builtin commands.
+ * @argv: array pointing to the arguments.
+ * @begin: pointer to the beginning of argv.
+ * Return: returns -1 or -0 on error.
  */
 int _help_builtin(char **argv, char __attribute__((__unused__)) **begin)
 {
