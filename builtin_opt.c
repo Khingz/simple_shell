@@ -1,9 +1,9 @@
 #include "shell.h"
 
 /**
-  * _getbuiltin: a func
-  * @cmd: as string
-  * @argv: a pointer
+  * _getbuiltin: a func description for the following arguement.
+  * @cmd: a string
+  * @argv: a pointer to a string
   * @begin: a pointer
   * Return: NULL
 **/
@@ -30,9 +30,9 @@ int (*_getbuiltin(char *cmd))(char **argv, char **begin)
 }
 
 /**
-  * exist_shell- func description
-  * @argv: a string
-  * @begin: a pointer
+  * exist_shell- func description for the arguements below
+  * @argv: an array pointing to a string
+  * @begin: a pointer to a string
   * Return: NULL
 **/
 int exit_shell(char **argv, char **begin)
