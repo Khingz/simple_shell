@@ -103,7 +103,7 @@ char *populate_path_dir(char *path)
 	{
 		if (path[i] == ':')
 		{
-			if (path[i + 1] == ':' || i == 0 || path[i + 1] == '\0')
+		       if (path[i + 1] == ':' || i == 0 || path[i + 1] == '\0')
 				len += _strlen(pwd) + 1;
 			else
 				len++;
@@ -141,14 +141,12 @@ char *populate_path_dir(char *path)
 }
 
 /**
- * add_alias_end - Adds a node to the end of a alias_t linked list.
- * @head: A pointer to the head of the list_t list.
- * @name: The name of the new alias to be added.
- * @value: The value of the new alias to be added.
- *
- * Return: If an error occurs - NULL.
- *         Otherwise - a pointer to the new node.
- */
+ * add_aliase_end - func that adds a node to the end of a alias_t linked list.
+ * @head: points to the head of the list_t list.
+ * @name: new name of the alias to be added.
+ * @val: value of the new alias to be added.
+ * Return: returns NULL or points to a new node
+ **/
 alias_t *add_aliase_end(alias_t **head, char *name, char *val)
 {
 	alias_t *end;
@@ -182,9 +180,10 @@ alias_t *add_aliase_end(alias_t **head, char *name, char *val)
 }
 
 /**
- * free_alias_list - Frees a alias_t linked list.
- * @head: THe head of the alias_t list.
- */
+ * free_aliase_list - func that frees a alias_t linked list.
+ * @head: points to the  head of the alias_t list.
+ * Return: no return value
+ **/
 void free_aliase_list(alias_t *head)
 {
 	alias_t *next;
