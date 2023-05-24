@@ -10,7 +10,7 @@ node_t *add_node_end(node_t **head, char *dir)
 {
 	node_t *last;
 	node_t *new_node;
-       
+
 	new_node = malloc(sizeof(node_t));
 	if (!new_node)
 		return (NULL);
@@ -44,7 +44,7 @@ node_t *get_dir(char *path)
 	char **dirs;
 	node_t *head;
 	char *tmp_path;
-       
+
 	head = NULL;
 	tmp_path = populate_path_dir(path);
 	if (!tmp_path)
@@ -89,7 +89,7 @@ void free_list(node_t *head)
 /**
  * populate_path_dir - func that moves path and replaces leading/sandwiched/
  * trailing colons (:) with CWD
- * path: pointer
+ * @path: pointer
  * Return: no return value
  **/
 char *populate_path_dir(char *path)
@@ -103,7 +103,7 @@ char *populate_path_dir(char *path)
 	{
 		if (path[i] == ':')
 		{
-		       if (path[i + 1] == ':' || i == 0 || path[i + 1] == '\0')
+		if (path[i + 1] == ':' || i == 0 || path[i + 1] == '\0')
 				len += _strlen(pwd) + 1;
 			else
 				len++;
@@ -151,7 +151,7 @@ alias_t *add_aliase_end(alias_t **head, char *name, char *val)
 {
 	alias_t *end;
 	alias_t *new_node;
-	
+
 	new_node = malloc(sizeof(alias_t));
 	if (!new_node)
 		return (NULL);
