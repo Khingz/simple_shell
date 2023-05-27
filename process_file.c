@@ -9,10 +9,10 @@ int process_file_cmd(char *file_path, int *exe_ex_val)
 {
 	ssize_t file;
 	ssize_t read_b;
-	unsigned int line_size, size_old;
+	unsigned int line_size, size_old, i;
 	char buff[120];
 	char *line;
-	int ex_val, i;
+	int ex_val;
 	char **argv, **prox;
 
 	line_size = 0;
