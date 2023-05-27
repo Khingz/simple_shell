@@ -13,40 +13,38 @@ int exec(char **argv, char **begin)
 		flag = 1;
 		cmd = get_loc(cmd);
 	}
-
-	pid_child = fork();
-	if (pid_child == -1)
+	if (!cmd || (access(cmd, F_OK) == -1))
 	{
-		if (flag)
-			free(cmd);
-		perror("Error child:");
-		return (1);
+		if (errno == EACCES)
+			ex_val = (create_err(argv, 126));
+		else
+			ex_val = (create_err(argv, 127));
 	}
-	if (pid_child == 0)
+	else
 	{
-		if (!cmd || (access(cmd, F_OK) == -1))
+		pid_child = fork();
+		if (pid_child == -1)
 		{
+			if (flag)
+				free(cmd);
+			perror("Error child:");
+			return (1);
+		}
+		if (pid_child == 0)
+		{
+			execve(cmd, argv, environ);
 			if (errno == EACCES)
-				ex_val = create_err(argv, 126);
-			else
-				ex_val = create_err(argv, 127);
+				ex_val = (create_err(argv, 126));
 			free_env();
 			free_args(argv, begin);
 			free_aliase_list(aliases);
 			_exit(ex_val);
 		}
-		execve(cmd, argv, NULL);
-		if (errno == EACCES)
-			ex_val = create_err(argv, 126);
-		free_env();
-		free_args(argv, begin);
-		free_aliase_list(aliases);
-		_exit(ex_val);
-	}
-	else
-	{
-		wait(&status);
-		ex_val = WEXITSTATUS(status);
+		else
+		{
+			wait(&status);
+			ex_val = WEXITSTATUS(status);
+		}
 	}
 	if (flag)
 		free(cmd);
@@ -146,6 +144,7 @@ int _call_args(char **args, char **begin, int *exe_ex_val)
 		{
 			free(args[idx]);
 			args[idx] = NULL;
+			args = _replace_aliases(args);
 			ex_val = _run_args(args, begin, exe_ex_val);
 			if (*exe_ex_val != 0)
 			{
@@ -163,6 +162,7 @@ int _call_args(char **args, char **begin, int *exe_ex_val)
 		{
 			free(args[idx]);
 			args[idx] = NULL;
+			args = _replace_aliases(args);
 			ex_val = _run_args(args, begin, exe_ex_val);
 			if (*exe_ex_val == 0)
 			{
@@ -177,7 +177,7 @@ int _call_args(char **args, char **begin, int *exe_ex_val)
 			}
 		}
 	}
-
+	args = _replace_aliases(args);
 	ex_val = _run_args(args, begin, exe_ex_val);
 	return (ex_val);
 }

@@ -137,3 +137,37 @@ void _print_aliase(alias_t *alias)
 	write(STDOUT_FILENO, aliase_str, len);
 	free(aliase_str);
 }
+
+char **_replace_aliases(char **argv)
+{
+	alias_t *tmp;
+	int i;
+	char *new_val;
+
+	if (_strcmp(argv[0], "alias") == 0)
+		return (argv);
+	for (i = 0; argv[i]; i++)
+	{
+		tmp = aliases;
+		while (tmp)
+		{
+			if (_strcmp(argv[i], tmp->name) == 0)
+			{
+				new_val = malloc(sizeof(char) * (_strlen(tmp->value) + 1));
+				if (!new_val)
+				{
+					free_args(argv, argv);
+					return (NULL);
+				}
+				_strcpy(new_val, tmp->value);
+				free(argv[i]);
+				argv[i] = new_val;
+				i--;
+				break;
+			}
+			tmp = tmp->next;
+		}
+	}
+
+	return (argv);
+}

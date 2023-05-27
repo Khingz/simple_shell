@@ -43,6 +43,7 @@ char *_get_env_val(char *proximal, int len)
 	char *sub, *tmp, *var;
 	char **var_loc;
 
+	sub = NULL;
 	var = malloc(len + 1);
 	if (!var)
 		return (NULL);
@@ -57,7 +58,7 @@ char *_get_env_val(char *proximal, int len)
 			tmp++;
 		tmp++;
 		sub = malloc(_strlen(tmp) + 1);
-		if (!sub)
+		if (sub)
 			_strcpy(sub, tmp);
 	}
 	return (sub);
@@ -131,7 +132,7 @@ void free_args(char **argv, char **begin)
 {
 	size_t i;
 
-	for (i = 0; argv[i]; i++)
+	for (i = 0; argv[i] || argv[i + 1]; i++)
 		free(argv[i]);
 	free(begin);
 }

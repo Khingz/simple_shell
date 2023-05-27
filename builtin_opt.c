@@ -42,6 +42,11 @@ int exit_shell(char **argv, char **begin)
 
 	if (argv[0])
 	{
+		if (argv[0][0] == '+')
+		{
+			i = 1;
+			int_len++;
+		}
 		for (; argv[0][i]; i++)
 		{
 		if (i <= int_len && argv[0][i] >= '0' && argv[0][i] <= '9')
@@ -82,8 +87,20 @@ int ch_cd(char **args, char __attribute__((__unused__)) **begin)
 
 	if (args[0])
 	{
-		if (*(args[0]) == '-')
-			chdir(*(_get_env("OLDPWD")) + 7);
+		if (*(args[0]) == '-' || _strcmp(args[0], "--") == 0)
+		{
+			if ((args[0][1] == '-' && args[0][2] == '\0') ||
+					args[0][1] == '\0')
+			{
+				if (_get_env("OLDPWD") != NULL)
+					(chdir(*_get_env("OLDPWD") + 7));
+			}
+			else
+			{
+				free(old_pwd);
+				return (create_err(args, 2));
+			}
+		}
 		else
 		{
 			if (stat(args[0], &dir) == 0 && S_ISDIR(dir.st_mode)
@@ -97,7 +114,10 @@ int ch_cd(char **args, char __attribute__((__unused__)) **begin)
 		}
 	}
 	else
-		chdir(*(_get_env("HOME")) + 5);
+	{
+		if (_get_env("HOME") != NULL)
+			chdir(*(_get_env("HOME")) + 5);
+	}
 
 	pwd = getcwd(pwd, 0);
 	if (!pwd)
@@ -116,7 +136,11 @@ int ch_cd(char **args, char __attribute__((__unused__)) **begin)
 	dir_inf[1] = pwd;
 	if (set_env(dir_inf, dir_inf) == -1)
 		return (-1);
-
+	if (args[0] && args[0][0] == '-' && args[0][1] != '-')
+	{
+		write(STDOUT_FILENO, pwd, _strlen(pwd));
+		write(STDOUT_FILENO, "\n", 1);
+	}
 	free(old_pwd);
 	free(pwd);
 	free(dir_inf);

@@ -94,7 +94,7 @@ char *_strchr(char *s, char c);
 int _strspn(char *s, char *accept);
 int _strcmp(char *s1, char *s2);
 int _strncmp(const char *s1, const char *s2, size_t n);
-int process_file_cmd(char *file_path);
+int process_file_cmd(char *file_path, int *exe_ex_val);
 
 
 /* Error helpers */
@@ -106,6 +106,7 @@ char *err_127(char **argv);
 char *err_cd(char **argv);
 char *err_env(char **argv);
 char *err_syntax(char **argv);
+char *err_one(char **args);
 
 /* Builtin */
 int exit_shell(char **argv, char **begin);
@@ -130,6 +131,7 @@ void _set_aliase(char *name, char *val);
 alias_t *add_aliase_end(alias_t **head, char *name, char *val);
 int _help_builtin(char **argv, char __attribute__((__unused__)) **begin);
 void free_aliase_list(alias_t *head);
+char **_replace_aliases(char **argv);
 
 /* help */
 void general_help(void);

@@ -19,7 +19,7 @@ char *get_loc(char *cmd)
 	head = _dirs;
 	while (_dirs)
 	{
-		tmp = malloc(_strlen(_dirs->dir) + 1 + _strlen(cmd) + 1);
+		tmp = malloc(_strlen(_dirs->dir) + 1 + _strlen(cmd) + 2);
 		if (!tmp)
 			return (NULL);
 		_strcpy(tmp, _dirs->dir);

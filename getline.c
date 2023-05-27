@@ -63,7 +63,6 @@ void reassign_lineptr(char **line_ptr, size_t *n, char *buff, size_t x)
 			*n = x;
 		else
 			*n = 120;
-		free(*line_ptr);
 		*line_ptr = buff;
 	}
 	else

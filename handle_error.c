@@ -10,7 +10,7 @@ int create_err(char **argv, int error)
 			_err = err_env(argv);
 			break;
 		case 1:
-			_err = err_env(argv);
+			_err = err_one(argv);
 			break;
 		case 2:
 			if (*(argv[0]) == 'e')

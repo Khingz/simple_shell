@@ -24,8 +24,9 @@ int main(int argc, char *argv[])
 		exit(-100);
 	if (argc != 1)
 	{
-		ex_val = process_file_cmd(argv[1]);
+		ex_val = process_file_cmd(argv[1], exe_ex_val);
 		free_env();
+		free_aliase_list(aliases);
 		return (ex_val);
 	}
 	if (!isatty(STDIN_FILENO))
